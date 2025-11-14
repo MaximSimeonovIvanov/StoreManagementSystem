@@ -5,3 +5,4 @@ public class Main {
         System.out.println("Store management system started successfully!");
     }
 }
+//this is just another test
