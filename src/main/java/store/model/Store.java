@@ -1,6 +1,8 @@
 package store.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Store {
@@ -12,14 +14,18 @@ public class Store {
 
     private double markupFoodPercent;
     private double markupNonFoodPercent;
-
     private int expiryDaysThreshold;
     private double expiryDiscountPercent;
 
-    private int receiptCounter = 1;
+    private int receiptCounter = 1;       //брояч за текущия ден
+    private LocalDate lastReceiptDate = LocalDate.now(); //кога деняъ се сменя
 
 
-    public Store(String name, double markupFoodPercent, double markupNonFoodPercent, int expiryDaysThreshold, double expiryDiscountPercent){
+    public Store(String name,
+                 double markupFoodPercent,
+                 double markupNonFoodPercent,
+                 int expiryDaysThreshold,
+                 double expiryDiscountPercent) {
 
         this.name = name;
         this.markupFoodPercent = markupFoodPercent;
@@ -27,60 +33,71 @@ public class Store {
         this.expiryDaysThreshold = expiryDaysThreshold;
         this.expiryDiscountPercent = expiryDiscountPercent;
 
-        products = new ArrayList<>();
-        cashiers = new ArrayList<>();
-        receipts = new ArrayList<>();
+        this.products = new ArrayList<>();
+        this.cashiers = new ArrayList<>();
+        this.receipts = new ArrayList<>();
     }
-
-
-    public Receipt createReceipt(Cashier cashier) {
-        //генерираме string id
-        String receiptId = String.format("R%03d", receiptCounter++);
-        return new Receipt(receiptId, cashier);
-    }
-
-
 
     public void addProduct(Product product) {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
-        for (Product p : products) {
-            if (p.getId() == product.getId()) {
-                throw new IllegalArgumentException("Product ID already exists");
-            }
-        }
-        products.add(product);  // ✅ ДОБАВЯМЕ продукта!
+        products.add(product);
     }
 
-    /*public boolean addProduct(Product product) {
-        if (product == null) {
-            return false;
-        }
-        for (Product p : products) {
-            if (p.getId() == product.getId()) {
-                return false;
-            }
-        }
-        products.add(product);
-        return true;
-    }*/
+    public List<Product> getProducts() {
+        return Collections.unmodifiableList(products);
+    }
 
     public void addCashier(Cashier cashier) {
-        //null проверка
         if (cashier == null) {
             throw new IllegalArgumentException("Cashier cannot be null");
         }
-        //проверка за дублиране
+
         if (hasCashierWithId(cashier.getId())) {
-            throw new IllegalArgumentException("Cashier with ID " + cashier.getId() + " already exists");
+            throw new IllegalArgumentException(
+                    "Cashier with ID " + cashier.getId() + " already exists");
         }
-        //добавяне на касиер
+
         cashiers.add(cashier);
     }
 
-    //помощен метод за проверка на дублиране
     private boolean hasCashierWithId(int id) {
-        return cashiers.stream().anyMatch(cashier -> cashier.getId() == id);
+        for (Cashier cashier : cashiers) {
+            if (cashier.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Cashier> getCashiers() {
+        return Collections.unmodifiableList(cashiers);
+    }
+
+    public Receipt createReceipt(Cashier cashier) {
+        if (cashier == null) {
+            throw new IllegalArgumentException("Cashier cannot be null");
+        }
+
+        String id = generateReceiptId(); //генерира ID
+
+        Receipt receipt = new Receipt(id, cashier);
+
+        receipts.add(receipt);
+
+        return receipt;
+    }
+
+    public List<Receipt> getReceipts() {
+        return Collections.unmodifiableList(receipts);
+    }
+
+    public int getReceiptsCount() {
+        return receipts.size();
+    }
+
+    private String generateReceiptId() {
+        return "R" + receiptCounter++;
     }
 }
