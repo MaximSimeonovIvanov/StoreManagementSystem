@@ -27,9 +27,22 @@ public class ReceiptItem {
     public int getQuantity() { return quantity; }
     public double getSellingPrice() { return sellingPrice; }
 
+    public String getProductName() {
+        return product.getName();
+        //директен достъп до името на продукта, когато трябва да покажем името в касовата бележка
+    }
+
     // изчисление
     public double getSubtotal() {
         return quantity * sellingPrice;
         //отговорност на ReceiptItem, защото знае своето quantity и price
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s - %d бр. x %.2f лв. = %.2f лв.",
+                product.getName(), quantity, sellingPrice, getSubtotal());
+        // защо: предоставя четим изход при печат и debugging
+    }
+
 }
