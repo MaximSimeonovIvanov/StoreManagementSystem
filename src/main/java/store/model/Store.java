@@ -32,6 +32,15 @@ public class Store {
         receipts = new ArrayList<>();
     }
 
+
+    public Receipt createReceipt(Cashier cashier) {
+        //генерираме string id
+        String receiptId = String.format("R%03d", receiptCounter++);
+        return new Receipt(receiptId, cashier);
+    }
+
+
+
     public void addProduct(Product product) {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
@@ -74,12 +83,4 @@ public class Store {
     private boolean hasCashierWithId(int id) {
         return cashiers.stream().anyMatch(cashier -> cashier.getId() == id);
     }
-
-    public Receipt createReceipt(Cashier cashier) {
-        //генерираме string id
-        String receiptId = String.format("R%03d", receiptCounter++);
-        return new Receipt(receiptId, cashier);
-    }
-
-
 }
