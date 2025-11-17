@@ -16,6 +16,9 @@ public class Store {
     private int expiryDaysThreshold;
     private double expiryDiscountPercent;
 
+    private int receiptCounter = 1;
+
+
     public Store(String name, double markupFoodPercent, double markupNonFoodPercent, int expiryDaysThreshold, double expiryDiscountPercent){
 
         this.name = name;
@@ -70,6 +73,12 @@ public class Store {
     //помощен метод за проверка на дублиране
     private boolean hasCashierWithId(int id) {
         return cashiers.stream().anyMatch(cashier -> cashier.getId() == id);
+    }
+
+    public Receipt createReceipt(Cashier cashier) {
+        //генерираме string id
+        String receiptId = String.format("R%03d", receiptCounter++);
+        return new Receipt(receiptId, cashier);
     }
 
 
