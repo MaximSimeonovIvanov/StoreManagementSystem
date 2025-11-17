@@ -1,9 +1,10 @@
 package store.model;
 
 public class ReceiptItem {
-    private final Product product;      //стока
-    private final int quantity;         // Колко
-    private final double sellingPrice;  // цена (различна от доставната)
+    private final int productId;
+    private final String productName;
+    private final double sellingPrice; //продажна цена
+    private final int quantity;
 
     public ReceiptItem(Product product, int quantity, double sellingPrice) {
         // Валидации:
@@ -17,20 +18,24 @@ public class ReceiptItem {
             throw new IllegalArgumentException("Selling price cannot be negative");
         }
 
-        this.product = product;
-        this.quantity = quantity;
+        this.productId = product.getId();
+        this.productName = product.getName();
         this.sellingPrice = sellingPrice;
+        this.quantity = quantity;
+        // ✅ Сега касовата бележка е ИСТОРИЧЕСКИ ЗАПИС
+        // ✅ Дори ако продуктът промени име/цена, бележката остава същата
     }
 
     // Getters
-    public Product getProduct() { return product; }
+    public int getProductId() {return productId;}
+    public String getProductName() { return productName;}
     public int getQuantity() { return quantity; }
     public double getSellingPrice() { return sellingPrice; }
 
-    public String getProductName() {
+    /*public String getProductName() {
         return product.getName();
         //директен достъп до името на продукта, когато трябва да покажем името в касовата бележка
-    }
+    }*/
 
     // изчисление
     public double getSubtotal() {
@@ -41,7 +46,7 @@ public class ReceiptItem {
     @Override
     public String toString() {
         return String.format("%s - %d бр. x %.2f лв. = %.2f лв.",
-                product.getName(), quantity, sellingPrice, getSubtotal());
+                productName, quantity, sellingPrice, getSubtotal());
         // защо: предоставя четим изход при печат и debugging
     }
 
