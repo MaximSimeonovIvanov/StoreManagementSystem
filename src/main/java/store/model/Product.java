@@ -8,7 +8,7 @@ public class Product {
     private final LocalDate expiryDate;
     private final ProductCategory category;
 
-    private double supplyPrice;
+    private final double supplyPrice;
     private double purchasePrice; // изчислява се от Store
 
     public Product(int id, String name, double supplyPrice, LocalDate expiryDate, ProductCategory category) {

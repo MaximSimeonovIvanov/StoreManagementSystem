@@ -100,4 +100,83 @@ public class Store {
     private String generateReceiptId() {
         return "R" + receiptCounter++;
     }
+
+    public void addProductToReceipt(String receiptId, int productId, int quantity) {
+        // 1. Намери бележката
+        Receipt receipt = findReceiptById(receiptId);
+        if (receipt == null) {
+            throw new IllegalArgumentException("Receipt with ID " + receiptId + " not found");
+        }
+
+        // 2. Намери продукта
+        Product product = findProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product with ID " + productId + " not found");
+        }
+
+        // 3. Провери наличност (ще имплементираме по-късно)
+        // 4. Изчисли продажната цена
+        double sellingPrice = calculateSellingPrice(product);
+
+        // 5. Създай ReceiptItem
+        ReceiptItem item = new ReceiptItem(product, quantity, sellingPrice);
+
+        // 6. Добави в бележката
+        receipt.addItem(item);
+    }
+
+    private Receipt findReceiptById(String receiptId) {
+        for (Receipt receipt : receipts) {
+            if (receipt.getId().equals(receiptId)) {
+                return receipt;
+            }
+        }
+        return null;
+    }
+
+    private Product findProductById(int productId) {
+        for (Product product : products) {
+            if (product.getId() == productId) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    private double calculateSellingPrice(Product product) {
+        // 1. Проверка за изтекъл срок
+        if (isProductExpired(product)) {
+            throw new IllegalStateException("Cannot sell expired product: " + product.getName());
+        }
+
+        // 2. Определи базовия markup според категорията
+        double baseMarkup = getBaseMarkupForCategory(product.getCategory());
+        double basePrice = product.getSupplyPrice() * (1 + baseMarkup);
+
+        // 3. Провери за намаление при наближаващ срок
+        if (isNearExpiration(product)) {
+            double discount = expiryDiscountPercent;
+            return basePrice * (1 - discount);
+        }
+        return basePrice;
+    }
+
+    private boolean isProductExpired(Product product) {
+        return product.getExpiryDate().isBefore(LocalDate.now());
+    }
+
+    private boolean isNearExpiration(Product product) {
+        LocalDate today = LocalDate.now();
+        LocalDate expiryDate = product.getExpiryDate();
+
+        long daysUntilExpiry = java.time.temporal.ChronoUnit.DAYS.between(today, expiryDate);
+        return daysUntilExpiry <= expiryDaysThreshold && daysUntilExpiry >= 0;
+    }
+
+    private double getBaseMarkupForCategory(ProductCategory category) {
+        return switch (category) {
+            case FOOD -> markupFoodPercent;
+            case NON_FOOD -> markupNonFoodPercent;
+        };
+    }
 }
