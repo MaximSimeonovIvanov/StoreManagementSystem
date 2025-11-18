@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Store {
 
@@ -18,7 +20,9 @@ public class Store {
     private double expiryDiscountPercent;
 
     private int receiptCounter = 1;       //брояч за текущия ден
-    private LocalDate lastReceiptDate = LocalDate.now(); //кога деняъ се сменя
+    private LocalDate lastReceiptDate = LocalDate.now(); //кога деняъ се смен
+
+    private final Map<Integer, Integer> productQuantities;
 
 
     public Store(String name,
@@ -36,13 +40,25 @@ public class Store {
         this.products = new ArrayList<>();
         this.cashiers = new ArrayList<>();
         this.receipts = new ArrayList<>();
+        this.productQuantities = new HashMap<>();
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product product, int initialQuantity) {
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
+        if (initialQuantity < 0) {
+            throw new IllegalArgumentException("initial quantity cannot be negatie");
+        }
+
+        //проверка за дублиране на id
+        for (Product p : products) {
+            if (p.getId() == product.getId()) {
+                throw new IllegalArgumentException("product with id " + product.getId() + "already exists");
+            }
+        }
         products.add(product);
+        productQuantities.put(product.getId(), initialQuantity);
     }
 
     public List<Product> getProducts() {
