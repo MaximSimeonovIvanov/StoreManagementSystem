@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import store.exception.InsufficientStockException;
 
 public class Store {
 
@@ -118,27 +119,32 @@ public class Store {
     }
 
     public void addProductToReceipt(String receiptId, int productId, int quantity) {
-        // 1. Намери бележката
+        //намери бележката
         Receipt receipt = findReceiptById(receiptId);
         if (receipt == null) {
             throw new IllegalArgumentException("Receipt with ID " + receiptId + " not found");
         }
 
-        // 2. Намери продукта
+        //намери продукта
         Product product = findProductById(productId);
         if (product == null) {
             throw new IllegalArgumentException("Product with ID " + productId + " not found");
         }
 
-        // 3. Провери наличност (ще имплементираме по-късно)
-        // 4. Изчисли продажната цена
+        //проверява наличност
+        checkStockAvailability(product, quantity);
+
+        //продажна цена
         double sellingPrice = calculateSellingPrice(product);
 
-        // 5. Създай ReceiptItem
+        // създава recipt item
         ReceiptItem item = new ReceiptItem(product, quantity, sellingPrice);
 
-        // 6. Добави в бележката
+        //добавя в бележката
         receipt.addItem(item);
+
+        // намаля наличност
+        reduceProductQuantity(productId, quantity);
     }
 
     private Receipt findReceiptById(String receiptId) {
@@ -195,4 +201,38 @@ public class Store {
             case NON_FOOD -> markupNonFoodPercent;
         };
     }
+
+    private void checkStockAvailability(Product product, int requestedQuantity) {
+        // текущото количество
+        Integer availableQuantity = productQuantities.get(product.getId());
+
+        // дали продуктът съществува
+        if (availableQuantity == null) {
+            throw new InsufficientStockException(product.getId(), product.getName(), requestedQuantity, 0);
+        }
+
+        //дали има достатъчно
+        if (availableQuantity < requestedQuantity) {
+            throw new InsufficientStockException(product.getId(), product.getName(), requestedQuantity, availableQuantity);
+        }
+    }
+
+    private void reduceProductQuantity(int productId, int quantity) {
+        int currentQuantity = productQuantities.get(productId);
+
+        int newQuantity = currentQuantity - quantity;
+
+        if (newQuantity < 0) {
+            throw new IllegalStateException(
+                    "Quantity cannot become negative for product ID: " + productId
+            );
+        }
+        productQuantities.put(productId, newQuantity);
+    }
+
+    public int getProductQuantity(int productId) {
+        return productQuantities.getOrDefault(productId, 0);
+        //без този метод ще ми хвърли null pointer exception
+    }
+
 }
