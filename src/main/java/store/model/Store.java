@@ -1,5 +1,7 @@
 package store.model;
 
+import store.service.InventoryService;
+import store.service.InventoryServiceImpl;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +23,8 @@ public class Store {
     private double expiryDiscountPercent;
 
     private int receiptCounter = 1;       //брояч за текущия ден
-    private final Map<Integer, Integer> productQuantities;
+//    private final Map<Integer, Integer> productQuantities;
+    private final InventoryService inventoryService;
 
 
     public Store(String name,
@@ -39,7 +42,8 @@ public class Store {
         this.products = new ArrayList<>();
         this.cashiers = new ArrayList<>();
         this.receipts = new ArrayList<>();
-        this.productQuantities = new HashMap<>();
+//        this.productQuantities = new HashMap<>();
+        this.inventoryService = new InventoryServiceImpl();
     }
 
     public void addProduct(Product product, int initialQuantity) {
@@ -57,7 +61,12 @@ public class Store {
             }
         }
         products.add(product);
-        productQuantities.put(product.getId(), initialQuantity);
+//        productQuantities.put(product.getId(), initialQuantity);
+        inventoryService.addStock(product, initialQuantity);
+    }
+
+    public int getProductQuantity(int productId) {
+        return inventoryService.getStock(productId);
     }
 
     public List<Product> getProducts() {
@@ -130,7 +139,7 @@ public class Store {
         }
 
         //проверява наличност
-        checkStockAvailability(product, quantity);
+        inventoryService.checkAvailability(product, quantity);
 
         //продажна цена
         double sellingPrice = calculateSellingPrice(product);
@@ -142,7 +151,7 @@ public class Store {
         receipt.addItem(item);
 
         // намаля наличност
-        reduceProductQuantity(productId, quantity);
+        inventoryService.reduceStock(productId, quantity);
     }
 
     private Receipt findReceiptById(String receiptId) {
@@ -200,37 +209,37 @@ public class Store {
         };
     }
 
-    private void checkStockAvailability(Product product, int requestedQuantity) {
-        // текущото количество
-        Integer availableQuantity = productQuantities.get(product.getId());
+//    private void checkStockAvailability(Product product, int requestedQuantity) {
+//        // текущото количество
+//        Integer availableQuantity = productQuantities.get(product.getId());
+//
+//        // дали продуктът съществува
+//        if (availableQuantity == null) {
+//            throw new InsufficientStockException(product.getId(), product.getName(), requestedQuantity, 0);
+//        }
+//
+//        //дали има достатъчно
+//        if (availableQuantity < requestedQuantity) {
+//            throw new InsufficientStockException(product.getId(), product.getName(), requestedQuantity, availableQuantity);
+//        }
+//    }
 
-        // дали продуктът съществува
-        if (availableQuantity == null) {
-            throw new InsufficientStockException(product.getId(), product.getName(), requestedQuantity, 0);
-        }
+//    private void reduceProductQuantity(int productId, int quantity) {
+//        int currentQuantity = productQuantities.get(productId);
+//
+//        int newQuantity = currentQuantity - quantity;
+//
+//        if (newQuantity < 0) {
+//            throw new IllegalStateException(
+//                    "Quantity cannot become negative for product ID: " + productId
+//            );
+//        }
+//        productQuantities.put(productId, newQuantity);
+//    }
 
-        //дали има достатъчно
-        if (availableQuantity < requestedQuantity) {
-            throw new InsufficientStockException(product.getId(), product.getName(), requestedQuantity, availableQuantity);
-        }
-    }
-
-    private void reduceProductQuantity(int productId, int quantity) {
-        int currentQuantity = productQuantities.get(productId);
-
-        int newQuantity = currentQuantity - quantity;
-
-        if (newQuantity < 0) {
-            throw new IllegalStateException(
-                    "Quantity cannot become negative for product ID: " + productId
-            );
-        }
-        productQuantities.put(productId, newQuantity);
-    }
-
-    public int getProductQuantity(int productId) {
-        return productQuantities.getOrDefault(productId, 0);
-        //без този метод ще ми хвърли null pointer exception
-    }
+//    public int getProductQuantity(int productId) {
+//        return productQuantities.getOrDefault(productId, 0);
+//        //без този метод ще ми хвърли null pointer exception
+//    }
 
 }
