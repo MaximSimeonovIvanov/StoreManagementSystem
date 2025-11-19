@@ -95,7 +95,7 @@ public class Store {
             throw new IllegalArgumentException("Cashier cannot be null");
         }
 
-        String id = generateReceiptId(); //генерира ID
+            String id = generateReceiptId(); //генерира ID
 
         Receipt receipt = new Receipt(id, cashier);
 
