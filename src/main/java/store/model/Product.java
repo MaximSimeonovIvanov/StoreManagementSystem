@@ -9,10 +9,9 @@ public class Product {
     private final ProductCategory category;
 
     private final double supplyPrice;
-    private double purchasePrice; // изчислява се от Store
 
     public Product(int id, String name, double supplyPrice, LocalDate expiryDate, ProductCategory category) {
-        // Валидации
+        // валидации
         if (id <= 0) throw new IllegalArgumentException("ID must be positive");
         if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("Name cannot be null or empty");
         if (supplyPrice < 0) throw new IllegalArgumentException("Price cannot be negative");
@@ -38,15 +37,7 @@ public class Product {
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
-    public double getPurchasePrice() {
-        return purchasePrice;
-    }
     public ProductCategory getCategory() {
         return category;
-    }
-
-
-    public void setPurchasePrice(double purchasePrice) {
-        this.purchasePrice = purchasePrice;
     }
 }

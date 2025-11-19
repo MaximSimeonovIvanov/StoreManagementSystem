@@ -21,8 +21,6 @@ public class Store {
     private double expiryDiscountPercent;
 
     private int receiptCounter = 1;       //брояч за текущия ден
-    private LocalDate lastReceiptDate = LocalDate.now(); //кога деняъ се смен
-
     private final Map<Integer, Integer> productQuantities;
 
 
@@ -166,16 +164,16 @@ public class Store {
     }
 
     private double calculateSellingPrice(Product product) {
-        // 1. Проверка за изтекъл срок
+        //проверка за изтекъл срок
         if (isProductExpired(product)) {
             throw new IllegalStateException("Cannot sell expired product: " + product.getName());
         }
 
-        // 2. Определи базовия markup според категорията
+        // markup според категорията
         double baseMarkup = getBaseMarkupForCategory(product.getCategory());
         double basePrice = product.getSupplyPrice() * (1 + baseMarkup);
 
-        // 3. Провери за намаление при наближаващ срок
+        //намаление при наближаващ срок
         if (isNearExpiration(product)) {
             double discount = expiryDiscountPercent;
             return basePrice * (1 - discount);

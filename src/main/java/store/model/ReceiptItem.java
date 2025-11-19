@@ -7,7 +7,7 @@ public class ReceiptItem {
     private final int quantity;
 
     public ReceiptItem(Product product, int quantity, double sellingPrice) {
-        // Валидации:
+        //валидации
         if (product == null) {
             throw new IllegalArgumentException("Product cannot be null");
         }
@@ -22,11 +22,9 @@ public class ReceiptItem {
         this.productName = product.getName();
         this.sellingPrice = sellingPrice;
         this.quantity = quantity;
-        // ✅ Сега касовата бележка е ИСТОРИЧЕСКИ ЗАПИС
-        // ✅ Дори ако продуктът промени име/цена, бележката остава същата
+        //дори ако продуктът промени име или цена бележката остава същата
     }
 
-    // Getters
     public int getProductId() {return productId;}
     public String getProductName() { return productName;}
     public int getQuantity() { return quantity; }

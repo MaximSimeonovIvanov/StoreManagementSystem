@@ -6,15 +6,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class Receipt {
-    // ✅ ПРОМЯНА: int id → String id
+    // int id → String id
     private final String id;
     private final Cashier cashier;
     private final LocalDateTime dateTime;
     private final List<ReceiptItem> items;
 
-    // ✅ ПРОМЯНА В КОНСТРУКТОРА: int id → String id
+    // int id → String id
     public Receipt(String id, Cashier cashier) {
-        // ✅ ПРОМЯНА В ВАЛИДАЦИЯТА:
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Receipt ID cannot be null or empty");
         }
@@ -28,7 +27,6 @@ public class Receipt {
         this.items = new ArrayList<>();
     }
 
-    // ✅ ПРОМЯНА: int → String
     public String getId() {
         return id;
     }
