@@ -4,6 +4,9 @@ import store.service.InventoryService;
 import store.service.InventoryServiceImpl;
 import store.service.PricingService;
 import store.service.PricingServiceImpl;
+import store.service.ReceiptService;
+import store.service.ReceiptServiceImpl;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,17 +21,18 @@ public class Store {
     private final String name;
     private final List<Product> products;
     private final List<Cashier> cashiers;
-    private final List<Receipt> receipts;
+//    private final List<Receipt> receipts;
 
 //    private double markupFoodPercent;
 //    private double markupNonFoodPercent;
 //    private int expiryDaysThreshold;
 //    private double expiryDiscountPercent;
 
-    private int receiptCounter = 1;       //брояч за текущия ден
+//    private int receiptCounter = 1;       //брояч за текущия ден
 //    private final Map<Integer, Integer> productQuantities;
     private final InventoryService inventoryService;
     private final PricingService pricingService;
+    private final ReceiptService receiptService;
 
 
     public Store(String name,
@@ -45,12 +49,13 @@ public class Store {
 
         this.products = new ArrayList<>();
         this.cashiers = new ArrayList<>();
-        this.receipts = new ArrayList<>();
+//        this.receipts = new ArrayList<>();
         this.inventoryService = new InventoryServiceImpl();
         this.pricingService = new PricingServiceImpl(
                 markupFoodPercent, markupNonFoodPercent,
                 expiryDaysThreshold, expiryDiscountPercent
         );
+        this.receiptService = new ReceiptServiceImpl();
         //        this.productQuantities = new HashMap<>();
     }
 
@@ -108,34 +113,24 @@ public class Store {
     }
 
     public Receipt createReceipt(Cashier cashier) {
-        if (cashier == null) {
-            throw new IllegalArgumentException("Cashier cannot be null");
-        }
-
-            String id = generateReceiptId(); //генерира ID
-
-        Receipt receipt = new Receipt(id, cashier);
-
-        receipts.add(receipt);
-
-        return receipt;
+        return receiptService.createReceipt(cashier);
     }
 
     public List<Receipt> getReceipts() {
-        return Collections.unmodifiableList(receipts);
+        return new ArrayList<>(); //временно
     }
 
     public int getReceiptsCount() {
-        return receipts.size();
+        return receiptService.getReceiptsCount();
     }
 
-    private String generateReceiptId() {
-        return "R" + receiptCounter++;
-    }
+//    private String generateReceiptId() {
+//        return "R" + receiptCounter++;
+//    }
 
     public void addProductToReceipt(String receiptId, int productId, int quantity) {
         //намери бележката
-        Receipt receipt = findReceiptById(receiptId);
+        Receipt receipt = receiptService.findReceiptById(receiptId);
         if (receipt == null) {
             throw new IllegalArgumentException("Receipt with ID " + receiptId + " not found");
         }
@@ -162,14 +157,14 @@ public class Store {
         inventoryService.reduceStock(product.getId(), quantity);
     }
 
-    private Receipt findReceiptById(String receiptId) {
-        for (Receipt receipt : receipts) {
-            if (receipt.getId().equals(receiptId)) {
-                return receipt;
-            }
-        }
-        return null;
-    }
+//    private Receipt findReceiptById(String receiptId) {
+//        for (Receipt receipt : receipts) {
+//            if (receipt.getId().equals(receiptId)) {
+//                return receipt;
+//            }
+//        }
+//        return null;
+//    }
 
     private Product findProductById(int productId) {
         for (Product product : products) {
