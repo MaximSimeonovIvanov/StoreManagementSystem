@@ -2,6 +2,9 @@ package store.model;
 
 import store.service.InventoryService;
 import store.service.InventoryServiceImpl;
+import store.service.PricingService;
+import store.service.PricingServiceImpl;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,14 +20,15 @@ public class Store {
     private final List<Cashier> cashiers;
     private final List<Receipt> receipts;
 
-    private double markupFoodPercent;
-    private double markupNonFoodPercent;
-    private int expiryDaysThreshold;
-    private double expiryDiscountPercent;
+//    private double markupFoodPercent;
+//    private double markupNonFoodPercent;
+//    private int expiryDaysThreshold;
+//    private double expiryDiscountPercent;
 
     private int receiptCounter = 1;       //брояч за текущия ден
 //    private final Map<Integer, Integer> productQuantities;
     private final InventoryService inventoryService;
+    private final PricingService pricingService;
 
 
     public Store(String name,
@@ -34,16 +38,20 @@ public class Store {
                  double expiryDiscountPercent) {
 
         this.name = name;
-        this.markupFoodPercent = markupFoodPercent;
-        this.markupNonFoodPercent = markupNonFoodPercent;
-        this.expiryDaysThreshold = expiryDaysThreshold;
-        this.expiryDiscountPercent = expiryDiscountPercent;
+//        this.markupFoodPercent = markupFoodPercent;
+//        this.markupNonFoodPercent = markupNonFoodPercent;
+//        this.expiryDaysThreshold = expiryDaysThreshold;
+//        this.expiryDiscountPercent = expiryDiscountPercent;
 
         this.products = new ArrayList<>();
         this.cashiers = new ArrayList<>();
         this.receipts = new ArrayList<>();
-//        this.productQuantities = new HashMap<>();
         this.inventoryService = new InventoryServiceImpl();
+        this.pricingService = new PricingServiceImpl(
+                markupFoodPercent, markupNonFoodPercent,
+                expiryDaysThreshold, expiryDiscountPercent
+        );
+        //        this.productQuantities = new HashMap<>();
     }
 
     public void addProduct(Product product, int initialQuantity) {
@@ -142,7 +150,7 @@ public class Store {
         inventoryService.checkAvailability(product.getId(), quantity);
 
         //продажна цена
-        double sellingPrice = calculateSellingPrice(product);
+        double sellingPrice = pricingService.calculateSellingPrice(product);
 
         // създава recipt item
         ReceiptItem item = new ReceiptItem(product, quantity, sellingPrice);
@@ -172,42 +180,42 @@ public class Store {
         return null;
     }
 
-    private double calculateSellingPrice(Product product) {
-        //проверка за изтекъл срок
-        if (isProductExpired(product)) {
-            throw new IllegalStateException("Cannot sell expired product: " + product.getName());
-        }
+//    private double calculateSellingPrice(Product product) {
+//        //проверка за изтекъл срок
+//        if (isProductExpired(product)) {
+//            throw new IllegalStateException("Cannot sell expired product: " + product.getName());
+//        }
+//
+//        // markup според категорията
+//        double baseMarkup = getBaseMarkupForCategory(product.getCategory());
+//        double basePrice = product.getSupplyPrice() * (1 + baseMarkup);
+//
+//        //намаление при наближаващ срок
+//        if (isNearExpiration(product)) {
+//            double discount = expiryDiscountPercent;
+//            return basePrice * (1 - discount);
+//        }
+//        return basePrice;
+//    }
 
-        // markup според категорията
-        double baseMarkup = getBaseMarkupForCategory(product.getCategory());
-        double basePrice = product.getSupplyPrice() * (1 + baseMarkup);
+//    private boolean isProductExpired(Product product) {
+//        return product.getExpiryDate().isBefore(LocalDate.now());
+//    }
 
-        //намаление при наближаващ срок
-        if (isNearExpiration(product)) {
-            double discount = expiryDiscountPercent;
-            return basePrice * (1 - discount);
-        }
-        return basePrice;
-    }
+//    private boolean isNearExpiration(Product product) {
+//        LocalDate today = LocalDate.now();
+//        LocalDate expiryDate = product.getExpiryDate();
+//
+//        long daysUntilExpiry = java.time.temporal.ChronoUnit.DAYS.between(today, expiryDate);
+//        return daysUntilExpiry <= expiryDaysThreshold && daysUntilExpiry >= 0;
+//    }
 
-    private boolean isProductExpired(Product product) {
-        return product.getExpiryDate().isBefore(LocalDate.now());
-    }
-
-    private boolean isNearExpiration(Product product) {
-        LocalDate today = LocalDate.now();
-        LocalDate expiryDate = product.getExpiryDate();
-
-        long daysUntilExpiry = java.time.temporal.ChronoUnit.DAYS.between(today, expiryDate);
-        return daysUntilExpiry <= expiryDaysThreshold && daysUntilExpiry >= 0;
-    }
-
-    private double getBaseMarkupForCategory(ProductCategory category) {
-        return switch (category) {
-            case FOOD -> markupFoodPercent;
-            case NON_FOOD -> markupNonFoodPercent;
-        };
-    }
+//    private double getBaseMarkupForCategory(ProductCategory category) {
+//        return switch (category) {
+//            case FOOD -> markupFoodPercent;
+//            case NON_FOOD -> markupNonFoodPercent;
+//        };
+//    }
 
 //    private void checkStockAvailability(Product product, int requestedQuantity) {
 //        // текущото количество
