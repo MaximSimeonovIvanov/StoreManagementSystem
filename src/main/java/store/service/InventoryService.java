@@ -7,5 +7,5 @@ public interface InventoryService {
     void addStock(Product product, int quantity);
     void reduceStock(int productId, int quantity) throws InsufficientStockException;
     int getStock(int productId);
-    void checkAvailability(Product product, int quantity) throws InsufficientStockException;
+    void checkAvailability(int productId, int quantity) throws InsufficientStockException;
 }

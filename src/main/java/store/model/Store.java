@@ -139,7 +139,7 @@ public class Store {
         }
 
         //проверява наличност
-        inventoryService.checkAvailability(product, quantity);
+        inventoryService.checkAvailability(product.getId(), quantity);
 
         //продажна цена
         double sellingPrice = calculateSellingPrice(product);
