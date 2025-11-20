@@ -62,7 +62,7 @@ public class Store {
         }
         products.add(product);
 //        productQuantities.put(product.getId(), initialQuantity);
-        inventoryService.addStock(product, initialQuantity);
+        inventoryService.addStock(product.getId(), initialQuantity);
     }
 
     public int getProductQuantity(int productId) {
@@ -151,7 +151,7 @@ public class Store {
         receipt.addItem(item);
 
         // намаля наличност
-        inventoryService.reduceStock(productId, quantity);
+        inventoryService.reduceStock(product.getId(), quantity);
     }
 
     private Receipt findReceiptById(String receiptId) {
