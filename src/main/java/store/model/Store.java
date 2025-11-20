@@ -117,7 +117,7 @@ public class Store {
     }
 
     public List<Receipt> getReceipts() {
-        return new ArrayList<>(); //временно
+        return receiptService.getAllReceipts();
     }
 
     public int getReceiptsCount() {

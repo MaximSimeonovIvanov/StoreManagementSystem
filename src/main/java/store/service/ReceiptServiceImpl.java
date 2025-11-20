@@ -41,4 +41,9 @@ public class ReceiptServiceImpl implements ReceiptService {
     public int getReceiptsCount() {
         return receipts.size();
     }
+
+    @Override
+    public List<Receipt> getAllReceipts(){
+        return new ArrayList<>(receipts);//връша копие на списъка
+    }
 }
