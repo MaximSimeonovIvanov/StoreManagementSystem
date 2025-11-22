@@ -21,15 +21,6 @@ public class Store {
     private final String name;
     private final List<Product> products;
     private final List<Cashier> cashiers;
-//    private final List<Receipt> receipts;
-
-//    private double markupFoodPercent;
-//    private double markupNonFoodPercent;
-//    private int expiryDaysThreshold;
-//    private double expiryDiscountPercent;
-
-//    private int receiptCounter = 1;       //брояч за текущия ден
-//    private final Map<Integer, Integer> productQuantities;
     private final InventoryService inventoryService;
     private final PricingService pricingService;
     private final ReceiptService receiptService;
@@ -42,21 +33,15 @@ public class Store {
                  double expiryDiscountPercent) {
 
         this.name = name;
-//        this.markupFoodPercent = markupFoodPercent;
-//        this.markupNonFoodPercent = markupNonFoodPercent;
-//        this.expiryDaysThreshold = expiryDaysThreshold;
-//        this.expiryDiscountPercent = expiryDiscountPercent;
 
         this.products = new ArrayList<>();
         this.cashiers = new ArrayList<>();
-//        this.receipts = new ArrayList<>();
         this.inventoryService = new InventoryServiceImpl();
         this.pricingService = new PricingServiceImpl(
                 markupFoodPercent, markupNonFoodPercent,
                 expiryDaysThreshold, expiryDiscountPercent
         );
         this.receiptService = new ReceiptServiceImpl();
-        //        this.productQuantities = new HashMap<>();
     }
 
     public void addProduct(Product product, int initialQuantity) {
@@ -74,7 +59,6 @@ public class Store {
             }
         }
         products.add(product);
-//        productQuantities.put(product.getId(), initialQuantity);
         inventoryService.addStock(product.getId(), initialQuantity);
     }
 
@@ -124,10 +108,6 @@ public class Store {
         return receiptService.getReceiptsCount();
     }
 
-//    private String generateReceiptId() {
-//        return "R" + receiptCounter++;
-//    }
-
     public void addProductToReceipt(String receiptId, int productId, int quantity) {
         //намери бележката
         Receipt receipt = receiptService.findReceiptById(receiptId);
@@ -157,15 +137,6 @@ public class Store {
         inventoryService.reduceStock(product.getId(), quantity);
     }
 
-//    private Receipt findReceiptById(String receiptId) {
-//        for (Receipt receipt : receipts) {
-//            if (receipt.getId().equals(receiptId)) {
-//                return receipt;
-//            }
-//        }
-//        return null;
-//    }
-
     private Product findProductById(int productId) {
         for (Product product : products) {
             if (product.getId() == productId) {
@@ -174,75 +145,4 @@ public class Store {
         }
         return null;
     }
-
-//    private double calculateSellingPrice(Product product) {
-//        //проверка за изтекъл срок
-//        if (isProductExpired(product)) {
-//            throw new IllegalStateException("Cannot sell expired product: " + product.getName());
-//        }
-//
-//        // markup според категорията
-//        double baseMarkup = getBaseMarkupForCategory(product.getCategory());
-//        double basePrice = product.getSupplyPrice() * (1 + baseMarkup);
-//
-//        //намаление при наближаващ срок
-//        if (isNearExpiration(product)) {
-//            double discount = expiryDiscountPercent;
-//            return basePrice * (1 - discount);
-//        }
-//        return basePrice;
-//    }
-
-//    private boolean isProductExpired(Product product) {
-//        return product.getExpiryDate().isBefore(LocalDate.now());
-//    }
-
-//    private boolean isNearExpiration(Product product) {
-//        LocalDate today = LocalDate.now();
-//        LocalDate expiryDate = product.getExpiryDate();
-//
-//        long daysUntilExpiry = java.time.temporal.ChronoUnit.DAYS.between(today, expiryDate);
-//        return daysUntilExpiry <= expiryDaysThreshold && daysUntilExpiry >= 0;
-//    }
-
-//    private double getBaseMarkupForCategory(ProductCategory category) {
-//        return switch (category) {
-//            case FOOD -> markupFoodPercent;
-//            case NON_FOOD -> markupNonFoodPercent;
-//        };
-//    }
-
-//    private void checkStockAvailability(Product product, int requestedQuantity) {
-//        // текущото количество
-//        Integer availableQuantity = productQuantities.get(product.getId());
-//
-//        // дали продуктът съществува
-//        if (availableQuantity == null) {
-//            throw new InsufficientStockException(product.getId(), product.getName(), requestedQuantity, 0);
-//        }
-//
-//        //дали има достатъчно
-//        if (availableQuantity < requestedQuantity) {
-//            throw new InsufficientStockException(product.getId(), product.getName(), requestedQuantity, availableQuantity);
-//        }
-//    }
-
-//    private void reduceProductQuantity(int productId, int quantity) {
-//        int currentQuantity = productQuantities.get(productId);
-//
-//        int newQuantity = currentQuantity - quantity;
-//
-//        if (newQuantity < 0) {
-//            throw new IllegalStateException(
-//                    "Quantity cannot become negative for product ID: " + productId
-//            );
-//        }
-//        productQuantities.put(productId, newQuantity);
-//    }
-
-//    public int getProductQuantity(int productId) {
-//        return productQuantities.getOrDefault(productId, 0);
-//        //без този метод ще ми хвърли null pointer exception
-//    }
-
 }

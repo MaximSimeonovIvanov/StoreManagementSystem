@@ -30,11 +30,6 @@ public class ReceiptItem {
     public int getQuantity() { return quantity; }
     public double getSellingPrice() { return sellingPrice; }
 
-    /*public String getProductName() {
-        return product.getName();
-        //директен достъп до името на продукта, когато трябва да покажем името в касовата бележка
-    }*/
-
     // изчисление
     public double getSubtotal() {
         return quantity * sellingPrice;
