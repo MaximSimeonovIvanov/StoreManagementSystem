@@ -1,11 +1,6 @@
 package store.model;
 
-import store.service.InventoryService;
-import store.service.InventoryServiceImpl;
-import store.service.PricingService;
-import store.service.PricingServiceImpl;
-import store.service.ReceiptService;
-import store.service.ReceiptServiceImpl;
+import store.service.*;
 
 
 import java.time.LocalDate;
@@ -19,11 +14,11 @@ import store.exception.InsufficientStockException;
 public class Store {
 
     private final String name;
-    private final List<Product> products;
     private final List<Cashier> cashiers;
     private final InventoryService inventoryService;
     private final PricingService pricingService;
     private final ReceiptService receiptService;
+    private final ProductService productService;
 
 
     public Store(String name,
@@ -34,7 +29,6 @@ public class Store {
 
         this.name = name;
 
-        this.products = new ArrayList<>();
         this.cashiers = new ArrayList<>();
         this.inventoryService = new InventoryServiceImpl();
         this.pricingService = new PricingServiceImpl(
@@ -42,6 +36,7 @@ public class Store {
                 expiryDaysThreshold, expiryDiscountPercent
         );
         this.receiptService = new ReceiptServiceImpl();
+        this.productService = new ProductServiceImpl();
     }
 
     public void addProduct(Product product, int initialQuantity) {
@@ -52,13 +47,7 @@ public class Store {
             throw new IllegalArgumentException("initial quantity cannot be negatie");
         }
 
-        //проверка за дублиране на id
-        for (Product p : products) {
-            if (p.getId() == product.getId()) {
-                throw new IllegalArgumentException("product with id " + product.getId() + "already exists");
-            }
-        }
-        products.add(product);
+        productService.addProduct(product);
         inventoryService.addStock(product.getId(), initialQuantity);
     }
 
@@ -67,7 +56,7 @@ public class Store {
     }
 
     public List<Product> getProducts() {
-        return Collections.unmodifiableList(products);
+        return productService.getAllProducts();
     }
 
     public void addCashier(Cashier cashier) {
@@ -116,7 +105,7 @@ public class Store {
         }
 
         //намери продукта
-        Product product = findProductById(productId);
+        Product product = productService.findProductById(productId);
         if (product == null) {
             throw new IllegalArgumentException("Product with ID " + productId + " not found");
         }
@@ -135,14 +124,5 @@ public class Store {
 
         // намаля наличност
         inventoryService.reduceStock(product.getId(), quantity);
-    }
-
-    private Product findProductById(int productId) {
-        for (Product product : products) {
-            if (product.getId() == productId) {
-                return product;
-            }
-        }
-        return null;
     }
 }
