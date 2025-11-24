@@ -2,23 +2,16 @@ package store.model;
 
 import store.service.*;
 
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-import store.exception.InsufficientStockException;
 
 public class Store {
 
     private final String name;
-    private final List<Cashier> cashiers;
     private final InventoryService inventoryService;
     private final PricingService pricingService;
     private final ReceiptService receiptService;
     private final ProductService productService;
+    private final CashierService cashierService;
 
 
     public Store(String name,
@@ -29,7 +22,6 @@ public class Store {
 
         this.name = name;
 
-        this.cashiers = new ArrayList<>();
         this.inventoryService = new InventoryServiceImpl();
         this.pricingService = new PricingServiceImpl(
                 markupFoodPercent, markupNonFoodPercent,
@@ -37,6 +29,7 @@ public class Store {
         );
         this.receiptService = new ReceiptServiceImpl();
         this.productService = new ProductServiceImpl();
+        this.cashierService = new CashierServiceImpl();
     }
 
     public void addProduct(Product product, int initialQuantity) {
@@ -59,34 +52,25 @@ public class Store {
         return productService.getAllProducts();
     }
 
-    public void addCashier(Cashier cashier) {
-        if (cashier == null) {
-            throw new IllegalArgumentException("Cashier cannot be null");
-        }
-
-        if (hasCashierWithId(cashier.getId())) {
-            throw new IllegalArgumentException(
-                    "Cashier with ID " + cashier.getId() + " already exists");
-        }
-
-        cashiers.add(cashier);
+    public void addCashier(Cashier cashier){
+        cashierService.addCashier(cashier);
     }
 
-    private boolean hasCashierWithId(int id) {
-        for (Cashier cashier : cashiers) {
-            if (cashier.getId() == id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public List<Cashier> getCashiers() {
-        return Collections.unmodifiableList(cashiers);
+    public List<Cashier> getCashiers(){
+        return cashierService.getAllCashiers();
     }
 
     public Receipt createReceipt(Cashier cashier) {
-        return receiptService.createReceipt(cashier);
+        if (cashier == null){
+            throw new IllegalArgumentException("cashier cannot be null");
+        }
+
+        Cashier existingCashier = cashierService.findCashierById(cashier.getId());
+        if (existingCashier == null){
+            throw new IllegalArgumentException("cashier with ID "+cashier.getId() + "not found in system");
+        }
+
+        return receiptService.createReceipt(existingCashier);
     }
 
     public List<Receipt> getReceipts() {
