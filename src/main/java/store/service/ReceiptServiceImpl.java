@@ -4,6 +4,7 @@ import store.model.Receipt;
 import store.model.Cashier;
 import java.util.ArrayList;
 import java.util.List;
+import store.util.ReceiptFileWriter;
 
 public class ReceiptServiceImpl implements ReceiptService {
     private final List<Receipt> receipts;
@@ -24,6 +25,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 
         Receipt receipt = new Receipt(receiptId, cashier);
         receipts.add(receipt);
+        //ReceiptFileWriter.saveReceiptToFile(receipt); НЕ ЗАПИСВАМ ФАЙЛ ПРИ ПРАЗНА БЕЛЕЖКА
         return receipt;
     }
 

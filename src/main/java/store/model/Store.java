@@ -1,7 +1,7 @@
 package store.model;
 
 import store.service.*;
-
+import store.util.ReceiptFileWriter;
 import java.util.List;
 
 public class Store {
@@ -108,5 +108,7 @@ public class Store {
 
         // намаля наличност
         inventoryService.reduceStock(product.getId(), quantity);
+
+        ReceiptFileWriter.saveReceiptToFile(receipt);
     }
 }
