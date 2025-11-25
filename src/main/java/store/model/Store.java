@@ -81,34 +81,46 @@ public class Store {
         return receiptService.getReceiptsCount();
     }
 
-    public void addProductToReceipt(String receiptId, int productId, int quantity) {
-        //намери бележката
-        Receipt receipt = receiptService.findReceiptById(receiptId);
-        if (receipt == null) {
-            throw new IllegalArgumentException("Receipt with ID " + receiptId + " not found");
-        }
 
-        //намери продукта
-        Product product = productService.findProductById(productId);
-        if (product == null) {
-            throw new IllegalArgumentException("Product with ID " + productId + " not found");
-        }
-
-        //проверява наличност
-        inventoryService.checkAvailability(product.getId(), quantity);
-
-        //продажна цена
-        double sellingPrice = pricingService.calculateSellingPrice(product);
-
-        // създава recipt item
-        ReceiptItem item = new ReceiptItem(product, quantity, sellingPrice);
-
-        //добавя в бележката
-        receipt.addItem(item);
-
-        // намаля наличност
-        inventoryService.reduceStock(product.getId(), quantity);
-
-        ReceiptFileWriter.saveReceiptToFile(receipt);
+    public void addProductToReceipt(String receiptId, int productId, int quantity){
+        Receipt receipt = findReceipt(receiptId);
+        Product product = findProduct(productId);
+        validateStock(product, quantity);
+        ReceiptItem = createReceiptItem(product, quantity);
+        addItemToReceipt(receipt, item);
+        updateInventory(product, quantity);
+        saveReceiptToFile(receipt);
     }
+    
+
+//    public void addProductToReceipt(String receiptId, int productId, int quantity) {
+//        //намери бележката
+//        Receipt receipt = receiptService.findReceiptById(receiptId);
+//        if (receipt == null) {
+//            throw new IllegalArgumentException("Receipt with ID " + receiptId + " not found");
+//        }
+//
+//        //намери продукта
+//        Product product = productService.findProductById(productId);
+//        if (product == null) {
+//            throw new IllegalArgumentException("Product with ID " + productId + " not found");
+//        }
+//
+//        //проверява наличност
+//        inventoryService.checkAvailability(product.getId(), quantity);
+//
+//        //продажна цена
+//        double sellingPrice = pricingService.calculateSellingPrice(product);
+//
+//        // създава recipt item
+//        ReceiptItem item = new ReceiptItem(product, quantity, sellingPrice);
+//
+//        //добавя в бележката
+//        receipt.addItem(item);
+//
+//        // намаля наличност
+//        inventoryService.reduceStock(product.getId(), quantity);
+//
+//        ReceiptFileWriter.saveReceiptToFile(receipt);
+//    }
 }

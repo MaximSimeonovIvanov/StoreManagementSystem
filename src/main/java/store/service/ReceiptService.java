@@ -10,4 +10,4 @@ public interface ReceiptService {
     Receipt findReceiptById(String receiptId);
     int getReceiptsCount();
     List<Receipt> getAllReceipts();
-}   
+}
