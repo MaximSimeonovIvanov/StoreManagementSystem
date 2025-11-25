@@ -1,7 +1,6 @@
 package store.model;
 
 import store.service.*;
-import store.util.ReceiptFileWriter;
 import java.util.List;
 
 public class Store {
@@ -136,7 +135,7 @@ public class Store {
         Receipt receipt = findReceipt(receiptId);
         double total = receipt.getTotal();
 
-        // Проверка дали клиентът има пари
+        //дали клиентът има пари
         if (!customer.canAfford(total)) {
             throw new IllegalStateException(
                     String.format("Клиент: %s няма достатъчно пари. Нужни: %.2f лв., Има: %.2f лв.",
@@ -144,10 +143,10 @@ public class Store {
             );
         }
 
-        // Плащане
+        //плащане
         customer.deductMoney(total);
 
-        // Записване на файл (вече знаем, че покупката е успешна)
+        //Записване на файл (вече знаем че покупката е успешна)
         saveReceiptToFile(receipt);
 
         System.out.println("Успешна покупка! Оставащи пари: " + customer.getWalletBalance() + " лв.");
@@ -177,7 +176,7 @@ public class Store {
         return getTotalRevenue() - getTotalSupplyCosts() - getTotalSalaryCosts();
     }
 
-    // ✅ ДОПЪЛНИТЕЛЕН метод за статистика
+    //статистика
     public void printFinancialReport() {
         System.out.println("\n=== ФИНАНСОВ ОТЧЕТ ===");
         System.out.printf("Общ оборот: %.2f лв.\n", getTotalRevenue());
