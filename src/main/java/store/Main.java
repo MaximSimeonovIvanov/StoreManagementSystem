@@ -3,6 +3,7 @@ package store;
 import store.model.*;
 import store.exception.InsufficientStockException;
 import java.time.LocalDate;
+import store.service.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,7 +13,14 @@ public class Main {
 
         try {
             //и инициализирам променливите тук
-            store = new Store("Моят магазин", 0.20, 0.30, 5, 0.15);
+            store = new Store(
+                    "Моят магазин",
+                    new InventoryServiceImpl(),
+                    new PricingServiceImpl(0.20, 0.30, 5, 0.15),
+                    new ReceiptServiceImpl(),
+                    new ProductServiceImpl(),
+                    new CashierServiceImpl()
+            );
             cashier = new Cashier(1, "Максим Иванов", 1500.0);
             store.addCashier(cashier);
 
@@ -52,7 +60,7 @@ public class Main {
                 System.out.println("Искани: " + e.getRequestedQuantity() + ", Налични: " + e.getAvailableQuantity());
             }
         } else {
-            System.out.println("\n❌ Неуспешно създаване на store или cashier - тестовете се пропускат");
+            System.out.println("\nНеуспешно създаване на store или cashier - тестовете се пропускат");
         }
 
         if (store != null && cashier != null) {

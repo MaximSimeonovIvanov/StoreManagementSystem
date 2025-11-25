@@ -15,21 +15,21 @@ public class Store {
 
 
     public Store(String name,
-                 double markupFoodPercent,
-                 double markupNonFoodPercent,
-                 int expiryDaysThreshold,
-                 double expiryDiscountPercent) {
+                 InventoryService inventoryService,
+                 PricingService pricingService,
+                 ReceiptService receiptService,
+                 ProductService productService,
+                 CashierService cashierService) {
+        if (name == null || name.trim().isEmpty()){
+            throw new IllegalArgumentException("dtore name cannot be empty");
+        }
 
         this.name = name;
-
-        this.inventoryService = new InventoryServiceImpl();
-        this.pricingService = new PricingServiceImpl(
-                markupFoodPercent, markupNonFoodPercent,
-                expiryDaysThreshold, expiryDiscountPercent
-        );
-        this.receiptService = new ReceiptServiceImpl();
-        this.productService = new ProductServiceImpl();
-        this.cashierService = new CashierServiceImpl();
+        this.inventoryService = inventoryService;
+        this.pricingService = pricingService;
+        this.receiptService = receiptService;
+        this.productService = productService;
+        this.cashierService = cashierService;
     }
 
     public void addProduct(Product product, int initialQuantity) {
@@ -121,36 +121,4 @@ public class Store {
     private void saveReceiptToFile(Receipt receipt){
         ReceiptFileWriter.saveReceiptToFile(receipt);
     }
-
-
-//    public void addProductToReceipt(String receiptId, int productId, int quantity) {
-//        //намери бележката
-//        Receipt receipt = receiptService.findReceiptById(receiptId);
-//        if (receipt == null) {
-//            throw new IllegalArgumentException("Receipt with ID " + receiptId + " not found");
-//        }
-//
-//        //намери продукта
-//        Product product = productService.findProductById(productId);
-//        if (product == null) {
-//            throw new IllegalArgumentException("Product with ID " + productId + " not found");
-//        }
-//
-//        //проверява наличност
-//        inventoryService.checkAvailability(product.getId(), quantity);
-//
-//        //продажна цена
-//        double sellingPrice = pricingService.calculateSellingPrice(product);
-//
-//        // създава recipt item
-//        ReceiptItem item = new ReceiptItem(product, quantity, sellingPrice);
-//
-//        //добавя в бележката
-//        receipt.addItem(item);
-//
-//        // намаля наличност
-//        inventoryService.reduceStock(product.getId(), quantity);
-//
-//        ReceiptFileWriter.saveReceiptToFile(receipt);
-//    }
 }
