@@ -4,7 +4,6 @@ import store.model.Receipt;
 import store.model.Cashier;
 import java.util.ArrayList;
 import java.util.List;
-import store.util.ReceiptFileWriter;
 
 public class ReceiptServiceImpl implements ReceiptService {
     private final List<Receipt> receipts;
