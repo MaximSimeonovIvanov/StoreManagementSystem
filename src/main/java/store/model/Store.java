@@ -86,12 +86,42 @@ public class Store {
         Receipt receipt = findReceipt(receiptId);
         Product product = findProduct(productId);
         validateStock(product, quantity);
-        ReceiptItem = createReceiptItem(product, quantity);
+        ReceiptItem item = createReceiptItem(product, quantity);
         addItemToReceipt(receipt, item);
         updateInventory(product, quantity);
         saveReceiptToFile(receipt);
     }
-    
+    private Receipt findReceipt(String receiptId){
+        Receipt receipt = receiptService.findReceiptById(receiptId);
+        if (receipt == null) {
+            throw new IllegalArgumentException("receipt with ID "+receiptId+" not found");
+        }
+        return receipt;
+    }
+    private Product findProduct(int productId){
+        Product product = productService.findProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("product with ID "+productId+" not found");
+        }
+        return product;
+    }
+    private void validateStock(Product product, int quantity){
+        inventoryService.checkAvailability(product.getId(), quantity);
+    }
+    private ReceiptItem createReceiptItem(Product product, int quantity){
+        double sellingPrice = pricingService.calculateSellingPrice(product);
+        return new ReceiptItem(product, quantity, sellingPrice);
+    }
+    private void addItemToReceipt(Receipt receipt, ReceiptItem item){
+        receipt.addItem(item);
+    }
+    private void updateInventory(Product product, int quantity){
+        inventoryService.reduceStock(product.getId(), quantity);
+    }
+    private void saveReceiptToFile(Receipt receipt){
+        ReceiptFileWriter.saveReceiptToFile(receipt);
+    }
+
 
 //    public void addProductToReceipt(String receiptId, int productId, int quantity) {
 //        //намери бележката
