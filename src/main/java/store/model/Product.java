@@ -8,7 +8,10 @@ public class Product {
     private final LocalDate expiryDate;
     private final ProductCategory category;
     private final double supplyPrice;
-    
+
+    //за проследяване на доставки и продажби => отчети
+    private int quantityDelivered;
+    private int quantitySold;
 
     public Product(int id, String name, double supplyPrice, LocalDate expiryDate, ProductCategory category) {
         // валидации
@@ -23,7 +26,25 @@ public class Product {
         this.supplyPrice = supplyPrice;
         this.expiryDate = expiryDate;
         this.category = category;
+        this.quantityDelivered = 0;
+        this.quantitySold = 0;
     }
+
+    public void addDelivery(int quantity) {
+        if (quantity < 0) throw new IllegalArgumentException("Quantity cannot be negative");
+        this.quantityDelivered += quantity;
+    }
+    public void addSale(int quantity) {
+        if (quantity < 0) throw new IllegalArgumentException("Quantity cannot be negative");
+        if (quantity > getAvailableQuantity()) {
+            throw new IllegalStateException("Not enough stock for sale");
+        }
+        this.quantitySold += quantity;
+    }
+    public int getQuantityDelivered() { return quantityDelivered; }
+    public int getQuantitySold() { return quantitySold; }
+    public int getAvailableQuantity() { return quantityDelivered - quantitySold; }
+
 
     public int getId() {
         return id;
@@ -40,4 +61,6 @@ public class Product {
     public ProductCategory getCategory() {
         return category;
     }
+
+
 }

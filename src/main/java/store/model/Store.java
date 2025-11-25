@@ -45,6 +45,7 @@ public class Store {
 
         productService.addProduct(product);
         inventoryService.addStock(product.getId(), initialQuantity);
+        productService.recordProductDelivery(product.getId(), initialQuantity);//записва доставката
     }
 
     public int getProductQuantity(int productId) {
@@ -120,6 +121,7 @@ public class Store {
     }
     private void updateInventory(Product product, int quantity){
         inventoryService.reduceStock(product.getId(), quantity);
+        productService.recordProductSale(product.getId(), quantity);//zapisva prodajbata chrez service-a
     }
     private void saveReceiptToFile(Receipt receipt){
         receiptFileService.saveReceipt(receipt); //така ползвам новия интерфехс
@@ -150,4 +152,40 @@ public class Store {
 
         System.out.println("Успешна покупка! Оставащи пари: " + customer.getWalletBalance() + " лв.");
     }
+    public double getTotalRevenue() {
+        double total = 0;
+        for (Receipt receipt : receiptService.getAllReceipts()) {
+            total += receipt.getTotal();
+        }
+        return total;
+    }
+
+    public double getTotalSalaryCosts() {
+        return 0.0;
+    }
+
+    public double getTotalSupplyCosts() {
+        double total = 0;
+        for (Product product : productService.getAllProducts()) {
+            // Доставна цена на ПРОДАДЕНИТЕ продукти
+            total += product.getSupplyPrice() * product.getQuantitySold();
+        }
+        return total;
+    }
+
+    public double getProfit() {
+        return getTotalRevenue() - getTotalSupplyCosts() - getTotalSalaryCosts();
+    }
+
+    // ✅ ДОПЪЛНИТЕЛЕН метод за статистика
+    public void printFinancialReport() {
+        System.out.println("\n=== ФИНАНСОВ ОТЧЕТ ===");
+        System.out.printf("Общ оборот: %.2f лв.\n", getTotalRevenue());
+        System.out.printf("Разходи за доставки: %.2f лв.\n", getTotalSupplyCosts());
+        System.out.printf("Разходи за заплати: %.2f лв.\n", getTotalSalaryCosts());
+        System.out.printf("ПЕЧАЛБА: %.2f лв.\n", getProfit());
+        System.out.println("======================");
+    }
+
+
 }

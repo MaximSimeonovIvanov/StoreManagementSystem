@@ -7,4 +7,7 @@ public interface ProductService {
     void addProduct(Product product);
     Product findProductById(int productId);
     List<Product> getAllProducts();
+
+    void recordProductSale(int productId, int quantity);
+    void recordProductDelivery(int productId, int quantity);
 }

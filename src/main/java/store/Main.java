@@ -102,5 +102,11 @@ public class Main {
         } catch (IllegalStateException e) {
             System.out.println("УСПЕХ: " + e.getMessage());
         }
+
+        System.out.println("\n ФИНАНСОВ ОТЧЕТ ");
+        System.out.printf("Общ оборот: %.2f лв.\n", store.getTotalRevenue());
+        System.out.printf("Разходи заплати: %.2f лв.\n", store.getTotalSalaryCosts());
+        System.out.printf("Разходи доставки: %.2f лв.\n", store.getTotalSupplyCosts());
+        System.out.printf("Печалба: %.2f лв.\n", store.getProfit());
     }
 }
