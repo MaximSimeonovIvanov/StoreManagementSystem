@@ -24,7 +24,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 
         Receipt receipt = new Receipt(receiptId, cashier);
         receipts.add(receipt);
-        //ReceiptFileWriter.saveReceiptToFile(receipt); НЕ ЗАПИСВАМ ФАЙЛ ПРИ ПРАЗНА БЕЛЕЖКА
+        //ReceiptFileWriter.saveReceiptToFile(receipt); НЕ ЗАПИСВАМ ФАЙЛ ПРИ ПРАЗНА БЕЛЕЖКА //статичен coupling
         return receipt;
     }
 

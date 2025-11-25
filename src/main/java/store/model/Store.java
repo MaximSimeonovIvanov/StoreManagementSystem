@@ -5,31 +5,34 @@ import store.util.ReceiptFileWriter;
 import java.util.List;
 
 public class Store {
-
+    //полетата
     private final String name;
     private final InventoryService inventoryService;
     private final PricingService pricingService;
     private final ReceiptService receiptService;
     private final ProductService productService;
     private final CashierService cashierService;
+    private final ReceiptFileService receiptFileService;
 
-
+                    //параметрите
     public Store(String name,
                  InventoryService inventoryService,
                  PricingService pricingService,
                  ReceiptService receiptService,
                  ProductService productService,
-                 CashierService cashierService) {
+                 CashierService cashierService,
+                 ReceiptFileService receiptFileService) {
         if (name == null || name.trim().isEmpty()){
             throw new IllegalArgumentException("dtore name cannot be empty");
         }
-
+        //инциализациите
         this.name = name;
         this.inventoryService = inventoryService;
         this.pricingService = pricingService;
         this.receiptService = receiptService;
         this.productService = productService;
         this.cashierService = cashierService;
+        this.receiptFileService = receiptFileService;
     }
 
     public void addProduct(Product product, int initialQuantity) {
@@ -119,6 +122,7 @@ public class Store {
         inventoryService.reduceStock(product.getId(), quantity);
     }
     private void saveReceiptToFile(Receipt receipt){
-        ReceiptFileWriter.saveReceiptToFile(receipt);
+        receiptFileService.saveReceipt(receipt); //така ползвам новия интерфехс
+        //ReceiptFileWriter.saveReceiptToFile(receipt); //това е статичен coupling и не е добра практика =“
     }
 }

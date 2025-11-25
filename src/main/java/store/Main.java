@@ -19,7 +19,8 @@ public class Main {
                     new PricingServiceImpl(0.20, 0.30, 5, 0.15),
                     new ReceiptServiceImpl(),
                     new ProductServiceImpl(),
-                    new CashierServiceImpl()
+                    new CashierServiceImpl(),
+                    new ReceiptFileServiceImpl()
             );
             cashier = new Cashier(1, "Максим Иванов", 1500.0);
             store.addCashier(cashier);
