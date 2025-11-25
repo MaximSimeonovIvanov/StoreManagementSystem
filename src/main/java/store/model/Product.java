@@ -7,8 +7,8 @@ public class Product {
     private final String name;
     private final LocalDate expiryDate;
     private final ProductCategory category;
-
     private final double supplyPrice;
+    
 
     public Product(int id, String name, double supplyPrice, LocalDate expiryDate, ProductCategory category) {
         // валидации

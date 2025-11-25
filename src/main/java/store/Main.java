@@ -80,7 +80,27 @@ public class Main {
                 System.out.println("УСПЕХ: " + e.getMessage());
             }
         }
+
+        System.out.println("\n  ТЕСТ 3: КЛИЕНТ С ПАРИ  ");
+        try {
+            Customer customer = new Customer("Иван Петров", 10.0); // Клиент с 10 лв.
+            Receipt receipt4 = store.createReceipt(cashier);
+            store.addProductToReceipt(receipt4.getId(), 101, 2); // Мляко 2 бр. x ~2.40 лв. = ~4.80 лв.
+            store.finalizePurchase(receipt4.getId(), customer);
+            System.out.println("УСПЕХ: Клиентът плати успешно!");
+        } catch (Exception e) {
+            System.out.println("ГРЕШКА: " + e.getMessage());
+        }
+
+        System.out.println("\n  ТЕСТ 4: КЛИЕНТ БЕЗ ПАРИ  ");
+        try {
+            Customer poorCustomer = new Customer("бедният", 1.0); // Клиент само с 1 лв.
+            Receipt receipt5 = store.createReceipt(cashier);
+            store.addProductToReceipt(receipt5.getId(), 101, 2); // Мляко 2 бр. = ~4.80 лв.
+            store.finalizePurchase(receipt5.getId(), poorCustomer);
+            System.out.println("ГРЕШКА: Това не трябва да се случи!");
+        } catch (IllegalStateException e) {
+            System.out.println("УСПЕХ: " + e.getMessage());
+        }
     }
-
-
 }

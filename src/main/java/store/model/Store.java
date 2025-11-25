@@ -92,7 +92,7 @@ public class Store {
         ReceiptItem item = createReceiptItem(product, quantity);
         addItemToReceipt(receipt, item);
         updateInventory(product, quantity);
-        saveReceiptToFile(receipt);
+        //saveReceiptToFile(receipt); това вече се прави в finalizePurchase
     }
     private Receipt findReceipt(String receiptId){
         Receipt receipt = receiptService.findReceiptById(receiptId);
@@ -123,6 +123,31 @@ public class Store {
     }
     private void saveReceiptToFile(Receipt receipt){
         receiptFileService.saveReceipt(receipt); //така ползвам новия интерфехс
-        //ReceiptFileWriter.saveReceiptToFile(receipt); //това е статичен coupling и не е добра практика =“
+        //ReceiptFileWriter.saveReceiptToFile(receipt); //това е статичен coupling и не е добра практика“
+    }
+
+    public void finalizePurchase(String receiptId, Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
+
+        Receipt receipt = findReceipt(receiptId);
+        double total = receipt.getTotal();
+
+        // Проверка дали клиентът има пари
+        if (!customer.canAfford(total)) {
+            throw new IllegalStateException(
+                    String.format("Клиент: %s няма достатъчно пари. Нужни: %.2f лв., Има: %.2f лв.",
+                            customer.getName(), total, customer.getWalletBalance())
+            );
+        }
+
+        // Плащане
+        customer.deductMoney(total);
+
+        // Записване на файл (вече знаем, че покупката е успешна)
+        saveReceiptToFile(receipt);
+
+        System.out.println("Успешна покупка! Оставащи пари: " + customer.getWalletBalance() + " лв.");
     }
 }
