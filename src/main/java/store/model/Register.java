@@ -4,16 +4,16 @@ public class Register {
     private int id;
     private String name;
 
-    public Register(int id,String name){
+    public Register(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 }
