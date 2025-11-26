@@ -12,6 +12,7 @@ public class Store {
     private final ProductService productService;
     private final CashierService cashierService;
     private final ReceiptFileService receiptFileService;
+    private final RegisterService registerService;
 
                     //параметрите
     public Store(String name,
@@ -20,7 +21,8 @@ public class Store {
                  ReceiptService receiptService,
                  ProductService productService,
                  CashierService cashierService,
-                 ReceiptFileService receiptFileService) {
+                 ReceiptFileService receiptFileService,
+                 RegisterService registerService) {
         if (name == null || name.trim().isEmpty()){
             throw new IllegalArgumentException("dtore name cannot be empty");
         }
@@ -32,6 +34,7 @@ public class Store {
         this.productService = productService;
         this.cashierService = cashierService;
         this.receiptFileService = receiptFileService;
+        this.registerService = registerService;
     }
 
     public void addProduct(Product product, int initialQuantity) {
@@ -186,5 +189,27 @@ public class Store {
         System.out.println("======================");
     }
 
+    //kasi
+    public void addRegister(Register register){
+        registerService.addRegister(register);
+    }
 
+    public void assignCashierToRegister(int cashierId, int registerId){
+        Cashier cashier = cashierService.findCashierById(cashierId);
+        Register register = registerService.findRegisterById(registerId);
+
+        if (cashier == null) {
+            throw new IllegalArgumentException("cashier not found");
+        }
+        if (register == null) {
+            throw new IllegalArgumentException("register not found");
+        }
+
+        cashier.assignToRegister(register);
+        System.out.println("касиер "+cashier.getName()+" назначен на каса "+register.getName());
+    }
+
+    public List<Register>getRegisters(){
+        return registerService.getAllRegisters();
+    }
 }

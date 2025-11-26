@@ -5,6 +5,7 @@ public class Cashier {
     private final int id;
     private final String name;
     private final double monthlySalary;
+    private Register currentRegister;
 
     //constructor
     public Cashier(int id, String name, double monthlySalary) {
@@ -15,6 +16,7 @@ public class Cashier {
         this.id = id;
         this.name = name;
         this.monthlySalary = monthlySalary;
+        this.currentRegister = null;
     }
 
     //getters
@@ -26,5 +28,17 @@ public class Cashier {
     }
     public double getMonthlySalary() {
         return monthlySalary;
+    }
+    public void assignToRegister(Register register){
+        this.currentRegister = register;
+    }
+    public void unassignFromRegister(){
+        this.currentRegister = null;
+    }
+    public Register getCurrentRegister(){
+        return currentRegister;
+    }
+    public boolean isAssignedToRegister(){
+        return currentRegister != null;
     }
 }
