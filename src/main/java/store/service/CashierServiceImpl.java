@@ -1,6 +1,6 @@
 package store.service;
 
-import store.model.Cashier;
+import  store.model.Cashier;
 import java.util.ArrayList;
 import java.util.List;
 
