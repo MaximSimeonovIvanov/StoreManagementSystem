@@ -67,4 +67,29 @@ class ReceiptServiceImplTest {
         receiptService.createReceipt(cashier);
         assertEquals(2, receiptService.getReceiptsCount());
     }
+
+    @Test
+    void testGetAllReceiptsReturnsUnmodifiableCopy() {
+        receiptService.createReceipt(cashier);
+        receiptService.createReceipt(cashier);
+
+        List<Receipt> receipts = receiptService.getAllReceipts();
+        assertEquals(2, receipts.size());
+
+        // Опит за модификация трябва да хвърли изключение
+        assertThrows(UnsupportedOperationException.class,
+                () -> receipts.add(null));
+    }
+
+    @Test
+    void testGetAllReceiptsDoesNotAffectOriginal() {
+        receiptService.createReceipt(cashier);
+        List<Receipt> receipts = receiptService.getAllReceipts();
+        assertEquals(1, receipts.size());
+
+        // Опит за модификация на копието не трябва да променя вътрешния списък
+        assertThrows(UnsupportedOperationException.class,
+                () -> receipts.clear());
+        assertEquals(1, receiptService.getReceiptsCount());
+    }
 }

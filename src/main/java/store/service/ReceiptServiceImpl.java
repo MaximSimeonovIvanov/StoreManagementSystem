@@ -45,6 +45,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public List<Receipt> getAllReceipts(){
-        return new ArrayList<>(receipts);//връша копие на списъка но това е modifiable!!!
+        return List.copyOf(receipts); //това е непроменим списък => запазвам Енкапсулацията !
+        //return new ArrayList<>(receipts);//връша копие на списъка но това е modifiable!!!
     }
 }
