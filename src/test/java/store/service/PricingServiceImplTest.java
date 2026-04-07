@@ -68,4 +68,34 @@ class PricingServiceImplTest {
         assertThrows(IllegalStateException.class,
                 () -> pricingService.calculateSellingPrice(expired));
     }
+
+    @Test
+    void testIsProductExpired() {
+        Product expired = new Product(7, "Лошо", 1.00,
+                today.minusDays(1), ProductCategory.FOOD);
+        Product fresh = new Product(8, "Добро", 1.00,
+                today.plusDays(1), ProductCategory.FOOD);
+        assertTrue(pricingService.isProductExpired(expired));
+        assertFalse(pricingService.isProductExpired(fresh));
+    }
+
+    @Test
+    void testIsNearExpiration() {
+        Product near = new Product(9, "Близо", 1.00,
+                today.plusDays(3), ProductCategory.FOOD);
+        Product notNear = new Product(10, "Далеч", 1.00,
+                today.plusDays(10), ProductCategory.FOOD);
+        assertTrue(pricingService.isNearExpiration(near));
+        assertFalse(pricingService.isNearExpiration(notNear));
+    }
+
+    @Test
+    void testProductWithZeroDaysLeftIsNearExpiration() {
+        // днес изтича
+        Product expiresToday = new Product(11, "Днешен", 1.00,
+                today, ProductCategory.FOOD);
+        assertTrue(pricingService.isNearExpiration(expiresToday));
+        double price = pricingService.calculateSellingPrice(expiresToday);
+        assertEquals(1.02, price, 0.001); // трябва да е намалена
+    }
 }
