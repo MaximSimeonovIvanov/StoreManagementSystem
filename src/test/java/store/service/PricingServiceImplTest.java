@@ -60,4 +60,12 @@ class PricingServiceImplTest {
         double price = pricingService.calculateSellingPrice(food);
         assertEquals(1.02, price, 0.001); // 1.00 * 1.20 * 0.85 = 1.02
     }
+
+    @Test
+    void testExpiredProductThrowsException() {
+        Product expired = new Product(6, "Изтекло сирене", 1.00,
+                today.minusDays(1), ProductCategory.FOOD);
+        assertThrows(IllegalStateException.class,
+                () -> pricingService.calculateSellingPrice(expired));
+    }
 }
