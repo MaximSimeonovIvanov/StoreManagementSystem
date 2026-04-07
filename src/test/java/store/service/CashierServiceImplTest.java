@@ -37,7 +37,6 @@ public class CashierServiceImplTest {
     }
 
     @Test
-    @Test
     void testFindCashierByIdExists() {
         Cashier cashier = new Cashier(1, "Иван", 1500.0);
         cashierService.addCashier(cashier);
@@ -46,5 +45,11 @@ public class CashierServiceImplTest {
         assertEquals(1, found.getId());
         assertEquals("Иван", found.getName());
         assertEquals(1500.0, found.getMonthlySalary());
+    }
+
+    @Test
+    void testFindCashierByIdNotExist(){
+        Cashier found = cashierService.findCashierById(9999);
+        assertNull(found);
     }
 }
