@@ -36,5 +36,5 @@ public class CashierServiceImpl implements CashierService {
     }
 
     @Override
-    public List<Cashier> getAllCashiers(){ return new ArrayList<>(cashiers);}
+    public List<Cashier> getAllCashiers(){ return List.copyOf(cashiers);}
 }
