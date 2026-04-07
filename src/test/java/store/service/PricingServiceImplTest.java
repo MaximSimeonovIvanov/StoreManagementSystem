@@ -15,7 +15,6 @@ class PricingServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        // Параметри: хранителни +20%, нехранителни +30%, праг 5 дни, намаление 15%
         pricingService = new PricingServiceImpl(0.20, 0.30, 5, 0.15);
         today = LocalDate.now();
     }
@@ -38,5 +37,27 @@ class PricingServiceImplTest {
         assertEquals(1.30, price, 0.001);
     }
 
-    
+    @Test
+    void testFoodProductNearExpiration() {
+        Product food = new Product(3, "Мляко", 2.00,
+                today.plusDays(3), ProductCategory.FOOD);
+        double price = pricingService.calculateSellingPrice(food);
+        assertEquals(2.04, price, 0.001);
+    }
+
+    @Test
+    void testNonFoodProductNearExpiration() {
+        Product nonFood = new Product(4, "Шампоан", 5.00,
+                today.plusDays(2), ProductCategory.NON_FOOD);
+        double price = pricingService.calculateSellingPrice(nonFood);
+        assertEquals(5.525, price, 0.001);
+    }
+
+    @Test
+    void testProductExactlyOnThresholdIsNearExpiration() {
+        Product food = new Product(5, "Кисело мляко", 1.00,
+                today.plusDays(5), ProductCategory.FOOD);
+        double price = pricingService.calculateSellingPrice(food);
+        assertEquals(1.02, price, 0.001); // 1.00 * 1.20 * 0.85 = 1.02
+    }
 }
