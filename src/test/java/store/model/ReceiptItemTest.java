@@ -25,4 +25,44 @@ public class ReceiptItemTest {
         assertEquals(15.0, item.getSellingPrice());
         assertEquals(45.0, item.getSubtotal());
     }
+
+    @Test
+    void testReceiptItemNullProductThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new ReceiptItem(null, 1, 10.0));
+    }
+
+    @Test
+    void testReceiptItemZeroQuantityThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new ReceiptItem(testProduct, 0, 10.0));
+    }
+
+    @Test
+    void testReceiptItemNegativeQuantityThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new ReceiptItem(testProduct, -1, 10.0));
+    }
+
+    @Test
+    void testReceiptItemNegativeSellingPriceThrows() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new ReceiptItem(testProduct, 1, -5.0));
+    }
+
+    @Test
+    void testSubtotalCalculation() {
+        ReceiptItem item = new ReceiptItem(testProduct, 5, 2.5);
+        assertEquals(12.5, item.getSubtotal());
+    }
+
+    @Test
+    void testToStringContainsProductNameAndQuantity() {
+        ReceiptItem item = new ReceiptItem(testProduct, 2, 3.0);
+        String str = item.toString();
+        assertTrue(str.contains("Testov produkt"));
+        assertTrue(str.contains("2 бр."));
+        assertTrue(str.contains("3.00"));
+        assertTrue(str.contains("6.00"));
+    }
 }
