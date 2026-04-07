@@ -25,6 +25,16 @@ public class CashierServiceImplTest {
 
     @Test
     void testAddCashierNullThrows(){
-        assertThrows()
+        assertThrows(IllegalArgumentException.class, () -> cashierService.addCashier(null));
     }
+
+    @Test
+    void testAddCashierDuplicateIdThrows(){
+        Cashier cashier1 = new Cashier(1, "Ivan", 1500.0);
+        Cashier cashier2 = new Cashier(1, "Petran", 1600.0);
+        cashierService.addCashier(cashier1);
+        assertThrows(IllegalArgumentException.class, () -> cashierService.addCashier(cashier2));
+    }
+
+    
 }
