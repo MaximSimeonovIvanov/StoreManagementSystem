@@ -36,5 +36,15 @@ public class CashierServiceImplTest {
         assertThrows(IllegalArgumentException.class, () -> cashierService.addCashier(cashier2));
     }
 
-    
+    @Test
+    @Test
+    void testFindCashierByIdExists() {
+        Cashier cashier = new Cashier(1, "Иван", 1500.0);
+        cashierService.addCashier(cashier);
+        Cashier found = cashierService.findCashierById(1);
+        assertNotNull(found);
+        assertEquals(1, found.getId());
+        assertEquals("Иван", found.getName());
+        assertEquals(1500.0, found.getMonthlySalary());
+    }
 }
