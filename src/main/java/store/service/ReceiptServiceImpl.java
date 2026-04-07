@@ -45,6 +45,6 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public List<Receipt> getAllReceipts(){
-        return new ArrayList<>(receipts);//връша копие на списъка
+        return new ArrayList<>(receipts);//връша копие на списъка но това е modifiable!!!
     }
 }
