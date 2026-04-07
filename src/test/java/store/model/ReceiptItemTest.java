@@ -3,6 +3,8 @@ package store.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.time.LocalDate;
 
 public class ReceiptItemTest {
@@ -15,5 +17,12 @@ public class ReceiptItemTest {
     }
 
     @Test
-    
+    void testReceiptItemCreationValid() {
+        ReceiptItem item = new ReceiptItem(testProduct, 3, 15.0);
+        assertEquals(1, item.getProductId());
+        assertEquals("Testov produkt", item.getProductName());
+        assertEquals(3, item.getQuantity());
+        assertEquals(15.0, item.getSellingPrice());
+        assertEquals(45.0, item.getSubtotal());
+    }
 }
