@@ -6,6 +6,7 @@ import store.model.*;
 import store.service.*;
 import store.exception.InsufficientStockException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -60,6 +61,12 @@ public class StoreTest {
 
         // nalichnostta trqbva da e namalqla
         assertEquals(8, store.getProductQuantity(102));
+    }
+
+    @Test
+    void testReceiptFileIsCreated() throws IOException{
+        Product milk = new Product(101,"mlyako", 2.00,LocalDate.now().plusDays(10),ProductCategory.FOOD);
+        
     }
 
     @Test
