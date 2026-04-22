@@ -20,11 +20,11 @@ public class ReceiptServiceImpl implements ReceiptService {
         }
 
         String receiptId = "R" + receiptCounter;
-        receiptCounter++;  // Просто увеличаваме брояча
+        receiptCounter++;
 
         Receipt receipt = new Receipt(receiptId, cashier);
         receipts.add(receipt);
-        //ReceiptFileWriter.saveReceiptToFile(receipt); НЕ ЗАПИСВАМ ФАЙЛ ПРИ ПРАЗНА БЕЛЕЖКА //статичен coupling
+        //ReceiptFileWriter.saveReceiptToFile(receipt); ne zapisvam fail pri prazna belejka //статичен coupling
         return receipt;
     }
 
@@ -46,6 +46,6 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public List<Receipt> getAllReceipts(){
         return List.copyOf(receipts); //това е непроменим списък => запазвам Енкапсулацията !
-        //return new ArrayList<>(receipts);//връша копие на списъка но това е modifiable!!!
+        //return new ArrayList<>(receipts);//това е modifiable!!!
     }
 }
