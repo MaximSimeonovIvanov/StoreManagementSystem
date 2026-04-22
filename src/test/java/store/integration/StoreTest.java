@@ -1,6 +1,7 @@
 package store.integration;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import store.model.*;
@@ -42,6 +43,7 @@ public class StoreTest {
     }
 
     @Test
+    @DisplayName("добавяне на продукт и проверяване на наличност")
     void testAddProductAndCheckStock() {
         Product milk = new Product(101, "мляко", 2.00, LocalDate.now().plusDays(10), ProductCategory.FOOD);
         store.addProduct(milk, 20);
@@ -53,6 +55,7 @@ public class StoreTest {
     }
 
     @Test
+    @DisplayName("създаване на бележка и добавяне на продукти в нея")
     void testCreateReceiptAndAddItems() {
         Product chocolate = new Product(102, "шоколад", 1.50, LocalDate.now().plusDays(30), ProductCategory.FOOD);
         store.addProduct(chocolate, 10);
@@ -70,6 +73,7 @@ public class StoreTest {
     }
 
     @Test
+    @DisplayName("проверка за успешно създаване на файл")
     void testReceiptFileIsCreated() throws IOException{
         Product milk = new Product(101,"mlyako", 2.00,LocalDate.now().plusDays(10),ProductCategory.FOOD);
         store.addProduct(milk,5);
@@ -87,6 +91,7 @@ public class StoreTest {
     }
 
     @Test
+    @DisplayName("успешно завършване на покупка")
     void testFinalizePurchaseSuccess() {
         Product milk = new Product(101, "мляко", 2.00, LocalDate.now().plusDays(3), ProductCategory.FOOD);
         store.addProduct(milk, 5);
@@ -104,6 +109,7 @@ public class StoreTest {
     }
 
     @Test
+    @DisplayName("опит за финализиране на покупка при недостиг на средтсва")
     void testFinalizePurchaseInsufficientFunds() {
         Product milk = new Product(101, "мляко", 2.00, LocalDate.now().plusDays(3), ProductCategory.FOOD);
         store.addProduct(milk, 5);
@@ -119,6 +125,7 @@ public class StoreTest {
     }
 
     @Test
+    @DisplayName("опит за покупка на повече продукт от наличното")
     void testInsufficientStockThrowsException() {
         Product bread = new Product(103, "хляб", 1.00,
                 LocalDate.now().plusDays(10), ProductCategory.FOOD);
@@ -133,6 +140,7 @@ public class StoreTest {
     }
 
     @Test
+    @DisplayName("опит за продажба на продукт с изтекъл срок")
     void testExpiredProductCannotBeSold() {
         Product expired = new Product(104, "изтекло", 1.00,
                 LocalDate.now().minusDays(1), ProductCategory.FOOD);
@@ -144,6 +152,7 @@ public class StoreTest {
     }
 
     @Test
+    @DisplayName("назначаване на касиер на каса")
     void testAssignCashierToRegister() {
         Register register = new Register(1, "каса 1");
         store.addRegister(register);
@@ -152,5 +161,22 @@ public class StoreTest {
         //проверява касиерът е назначен на касата
         assertNotNull(cashier.getCurrentRegister());
         assertEquals(1, cashier.getCurrentRegister().getId());
+    }
+
+    @Test
+    @DisplayName("опит за назначаване на втори касиер на същата каса")
+    void testAddingSecondCashierToARegisterThrowsException(){
+        Cashier cashier2 = new Cashier(2, "втори касиер", 1400.0);
+        store.addCashier(cashier2);
+
+        Register register = new Register(1, "каса 1");
+        store.addRegister(register);
+
+        store.assignCashierToRegister(cashier.getId(), register.getId());
+
+        assertThrows(IllegalStateException.class, () -> store.assignCashierToRegister(cashier2.getId(), register.getId()));
+
+        assertEquals(register, cashier.getCurrentRegister());
+        assertNull(cashier2.getCurrentRegister());
     }
 }
