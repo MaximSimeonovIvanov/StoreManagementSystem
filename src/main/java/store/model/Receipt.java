@@ -61,7 +61,7 @@ public class Receipt {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("=== Receipt ").append(id).append(" ===\n");  // ✅ Вече няма #
+        sb.append("=== Receipt ").append(id).append(" ===\n");
         sb.append("Cashier: ").append(cashier.getName()).append("\n");
         sb.append("Date: ").append(dateTime).append("\n\n");
 

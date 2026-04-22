@@ -162,10 +162,6 @@ public class Store {
         return total;
     }
 
-    public double getTotalSalaryCosts() {
-        return 0.0;
-    }
-
     public double getTotalSupplyCosts() {
         double total = 0;
         for (Product product : productService.getAllProducts()) {
@@ -175,17 +171,11 @@ public class Store {
         return total;
     }
 
-    public double getProfit() {
-        return getTotalRevenue() - getTotalSupplyCosts() - getTotalSalaryCosts();
-    }
-
     //статистика
     public void printFinancialReport() {
         System.out.println("\n=== ФИНАНСОВ ОТЧЕТ ===");
         System.out.printf("Общ оборот: %.2f лв.\n", getTotalRevenue());
         System.out.printf("Разходи за доставки: %.2f лв.\n", getTotalSupplyCosts());
-        System.out.printf("Разходи за заплати: %.2f лв.\n", getTotalSalaryCosts());
-        System.out.printf("ПЕЧАЛБА: %.2f лв.\n", getProfit());
         System.out.println("======================");
     }
 
