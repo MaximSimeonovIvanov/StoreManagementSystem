@@ -30,24 +30,24 @@ public class StoreTest {
                 new RegisterServiceImpl()
         );
 
-        cashier = new Cashier(1, "Тест Касиер", 1500.0);
+        cashier = new Cashier(1, "тест касиер", 1500.0);
         store.addCashier(cashier);
     }
 
     @Test
     void testAddProductAndCheckStock() {
-        Product milk = new Product(101, "Мляко", 2.00, LocalDate.now().plusDays(10), ProductCategory.FOOD);
+        Product milk = new Product(101, "мляко", 2.00, LocalDate.now().plusDays(10), ProductCategory.FOOD);
         store.addProduct(milk, 20);
 
         assertEquals(20, store.getProductQuantity(101));
         List<Product> products = store.getProducts();
         assertEquals(1, products.size());
-        assertEquals("Мляко", products.get(0).getName());
+        assertEquals("мляко", products.get(0).getName());
     }
 
     @Test
     void testCreateReceiptAndAddItems() {
-        Product chocolate = new Product(102, "Шоколад", 1.50, LocalDate.now().plusDays(30), ProductCategory.FOOD);
+        Product chocolate = new Product(102, "шоколад", 1.50, LocalDate.now().plusDays(30), ProductCategory.FOOD);
         store.addProduct(chocolate, 10);
 
         Receipt receipt = store.createReceipt(cashier);
@@ -64,13 +64,13 @@ public class StoreTest {
 
     @Test
     void testFinalizePurchaseSuccess() {
-        Product milk = new Product(101, "Мляко", 2.00, LocalDate.now().plusDays(3), ProductCategory.FOOD);
+        Product milk = new Product(101, "мляко", 2.00, LocalDate.now().plusDays(3), ProductCategory.FOOD);
         store.addProduct(milk, 5);
 
         Receipt receipt = store.createReceipt(cashier);
         store.addProductToReceipt(receipt.getId(), 101, 2);
 
-        Customer richCustomer = new Customer("Богат", 10.0);
+        Customer richCustomer = new Customer("богат", 10.0);
         store.finalizePurchase(receipt.getId(), richCustomer);
 
         assertEquals(10.0 - receipt.getTotal(), richCustomer.getWalletBalance(), 0.001);
@@ -81,13 +81,13 @@ public class StoreTest {
 
     @Test
     void testFinalizePurchaseInsufficientFunds() {
-        Product milk = new Product(101, "Мляко", 2.00, LocalDate.now().plusDays(3), ProductCategory.FOOD);
+        Product milk = new Product(101, "мляко", 2.00, LocalDate.now().plusDays(3), ProductCategory.FOOD);
         store.addProduct(milk, 5);
 
         Receipt receipt = store.createReceipt(cashier);
         store.addProductToReceipt(receipt.getId(), 101, 3);
 
-        Customer poorCustomer = new Customer("Беден", 2.0);
+        Customer poorCustomer = new Customer("беден", 2.0);
         assertThrows(IllegalStateException.class, () -> store.finalizePurchase(receipt.getId(), poorCustomer));
 
         //v tekushtata logika belejkata veche e v spisaka no bez zapisan fail
@@ -96,7 +96,7 @@ public class StoreTest {
 
     @Test
     void testInsufficientStockThrowsException() {
-        Product bread = new Product(103, "Хляб", 1.00,
+        Product bread = new Product(103, "хляб", 1.00,
                 LocalDate.now().plusDays(10), ProductCategory.FOOD);
         store.addProduct(bread, 2);
 
@@ -110,7 +110,7 @@ public class StoreTest {
 
     @Test
     void testExpiredProductCannotBeSold() {
-        Product expired = new Product(104, "Изтекло", 1.00,
+        Product expired = new Product(104, "изтекло", 1.00,
                 LocalDate.now().minusDays(1), ProductCategory.FOOD);
         store.addProduct(expired, 5);
 
@@ -121,11 +121,11 @@ public class StoreTest {
 
     @Test
     void testAssignCashierToRegister() {
-        Register register = new Register(1, "Каса 1");
+        Register register = new Register(1, "каса 1");
         store.addRegister(register);
         store.assignCashierToRegister(cashier.getId(), 1);
 
-        // Проверяваме, че касиерът е назначен на касата
+        //проверява касиерът е назначен на касата
         assertNotNull(cashier.getCurrentRegister());
         assertEquals(1, cashier.getCurrentRegister().getId());
     }
