@@ -34,11 +34,11 @@ public class StoreDemo{
 
     //метод създ на магазин
     private static Store createStore(){
-        System.out.println("1. СЪЗДАВАНЕ НА МАГАЗИН 'СИМ-МАРКЕТ'");
+        System.out.println("1.създаване на магазин 'СИМ'");
 
         //obekt Store s vsichki dependencies
         Store store = new Store(
-                "СИМ-МАРКЕТ",
+                "СИМ",
                 new InventoryServiceImpl(),
                 new PricingServiceImpl(0.20, 0.30, 5, 0.15),
                 new ReceiptServiceImpl(),
@@ -52,7 +52,7 @@ public class StoreDemo{
     }
 
     private static void demonstrateStaffAndRegisters(Store store){
-        System.out.println("\n2 ПЕРСОНАЛ И КАСИ");
+        System.out.println("\n2 персонал и каси");
 
         //създ и добавям касиери
         Cashier cashier1 = new Cashier(1, "pesho peshov", 1200.0);
@@ -74,8 +74,8 @@ public class StoreDemo{
     }
 
     private static void demonstrateProducts(Store store){
-        System.out.println("\n3 ДОБАВЯНЕ НА ПРОДУКТИ");
-        //produkti s razlichni srokove na godnost
+        System.out.println("\n3 добавяне на продукти");
+        //produkti s razlichni srokove
         Product milk = new Product(101, "мляко", 1.80, LocalDate.now().plusDays(3), ProductCategory.FOOD);
         Product chocolate = new Product(102, "шоколад", 1.20, LocalDate.now().plusDays(30),ProductCategory.FOOD);
         Product soap = new Product(201, "сапун", 0.80, LocalDate.now().plusDays(100), ProductCategory.NON_FOOD);
@@ -96,7 +96,7 @@ public class StoreDemo{
         System.out.println("\n ПРОДАЖБИ");
 
         //клиенти с различни бюджети
-        Customer richCustomer = new Customer("Делян Пеевски", 50.0);
+        Customer richCustomer = new Customer("матей петров", 50.0);
         Customer normalCustomer = new Customer("българин", 20.0);
 
         System.out.println("създадени клиенти: "+richCustomer.getName()+" пазарува");
