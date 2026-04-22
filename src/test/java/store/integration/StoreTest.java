@@ -179,4 +179,19 @@ public class StoreTest {
         assertEquals(register, cashier.getCurrentRegister());
         assertNull(cashier2.getCurrentRegister());
     }
+
+    @Test
+    @DisplayName("проверка на разходите за доставки на продадените стоки")
+    void testTotalSupplyCosts() {
+        Product milk = new Product(101, "мляко", 2.00, LocalDate.now().plusDays(10), ProductCategory.FOOD);
+        store.addProduct(milk, 10);
+
+        Receipt receipt = store.createReceipt(cashier);
+        store.addProductToReceipt(receipt.getId(), 101, 3);
+        Customer customer = new Customer("клиент", 20.0);
+        store.finalizePurchase(receipt.getId(), customer);
+
+        // очаквам = 3 * 2.00 = 6.00
+        assertEquals(6.00, store.getTotalSupplyCosts(), 0.001);
+    }
 }
