@@ -7,15 +7,32 @@ import java.io.IOException;
 import java.io.File;
 
 public class    ReceiptFileServiceImpl implements ReceiptFileService{
+
+    private final String receiptsDirectory;
+
+    //по подразбиране
+    public ReceiptFileServiceImpl() {
+        this("receipts");
+    }
+
+    //за тестове
+    public ReceiptFileServiceImpl(String receiptsDirectory) {
+        this.receiptsDirectory = receiptsDirectory;
+    }
+
     @Override
     public void saveReceipt(Receipt receipt){
         if (receipt.getItems().isEmpty()) {
             return; //taka ne sazdava file za prazni belejki
         }
-        String folder = "receipts";
-        new File(folder).mkdir();
 
-        String fileName = folder+"/receipt_"+receipt.getId()+".txt";
+        //използвам полето receiptDirectory, а не фиксиран низ
+        new File(receiptsDirectory).mkdirs();
+
+        //String folder = "receipts";
+        //new File(folder).mkdir();
+
+        String fileName = receiptsDirectory+File.separator+"/receipt_"+receipt.getId()+".txt";
 
         try(FileWriter writer = new FileWriter(fileName)){
             writer.write(generateReceiptContent(receipt));

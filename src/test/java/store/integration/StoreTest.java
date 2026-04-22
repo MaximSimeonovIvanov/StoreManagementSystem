@@ -2,23 +2,30 @@ package store.integration;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import store.model.*;
 import store.service.*;
 import store.exception.InsufficientStockException;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StoreTest {
+    @TempDir
+    Path tempDir;
+
     private Store store;
     private Cashier cashier;
     private Customer customer;
 
     @BeforeEach
     void setUp(){
+        ReceiptFileService fileService = new ReceiptFileServiceImpl(tempDir.toString());
         //sazdavam magazin s vsi4ki realni implementacii
         store = new Store(
                 "ТЕСТОВ МАГАЗИН",
@@ -27,7 +34,7 @@ public class StoreTest {
                 new ReceiptServiceImpl(),
                 new ProductServiceImpl(),
                 new CashierServiceImpl(),
-                new ReceiptFileServiceImpl(),
+                fileService,
                 new RegisterServiceImpl()
         );
 
@@ -66,7 +73,17 @@ public class StoreTest {
     @Test
     void testReceiptFileIsCreated() throws IOException{
         Product milk = new Product(101,"mlyako", 2.00,LocalDate.now().plusDays(10),ProductCategory.FOOD);
-        
+        store.addProduct(milk,5);
+        Receipt receipt = store.createReceipt(cashier);
+        store.addProductToReceipt(receipt.getId(), 101,2);
+        Customer customer = new Customer("test klient", 10.0);
+        store.finalizePurchase(receipt.getId(), customer);
+
+        Path receiptFile = Path.of("receipts/receipt_" + receipt.getId()+".txt");
+        assertTrue(Files.exists(receiptFile));
+        String content = Files.readString(receiptFile);
+        assertTrue(content.contains("mlyako"));
+        assertTrue(content.contains(receipt.getId()));
     }
 
     @Test
