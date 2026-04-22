@@ -21,7 +21,6 @@ public class StoreTest {
 
     private Store store;
     private Cashier cashier;
-    private Customer customer;
 
     @BeforeEach
     void setUp(){
@@ -79,7 +78,8 @@ public class StoreTest {
         Customer customer = new Customer("test klient", 10.0);
         store.finalizePurchase(receipt.getId(), customer);
 
-        Path receiptFile = Path.of("receipts/receipt_" + receipt.getId()+".txt");
+        Path receiptFile = tempDir.resolve("receipt_" + receipt.getId() + ".txt");
+        //Path receiptFile = Path.of("receipts/receipt_" + receipt.getId()+".txt");
         assertTrue(Files.exists(receiptFile));
         String content = Files.readString(receiptFile);
         assertTrue(content.contains("mlyako"));

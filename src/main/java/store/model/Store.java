@@ -195,6 +195,13 @@ public class Store {
             throw new IllegalArgumentException("register not found");
         }
 
+        //дали друг касиер вече работи на тази каса
+        for (Cashier c : cashierService.getAllCashiers()) {
+            if (c.getCurrentRegister() != null && c.getCurrentRegister().getId() == registerId) {
+                throw new IllegalStateException("Каса " + register.getName() + " вече е заета от касиер " + c.getName());
+            }
+        }
+
         cashier.assignToRegister(register);
         System.out.println("касиер "+cashier.getName()+" назначен на каса "+register.getName());
     }

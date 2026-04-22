@@ -32,7 +32,7 @@ public class    ReceiptFileServiceImpl implements ReceiptFileService{
         //String folder = "receipts";
         //new File(folder).mkdir();
 
-        String fileName = receiptsDirectory+File.separator+"/receipt_"+receipt.getId()+".txt";
+        String fileName = receiptsDirectory+File.separator+"receipt_"+receipt.getId()+".txt";
 
         try(FileWriter writer = new FileWriter(fileName)){
             writer.write(generateReceiptContent(receipt));
