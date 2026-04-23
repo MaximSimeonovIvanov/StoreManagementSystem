@@ -79,9 +79,6 @@ public class Store {
         return receiptService.createReceipt(existingCashier);
     }
 
-    public List<Receipt> getReceipts() {
-        return receiptService.getAllReceipts();
-    }
 
     public int getReceiptsCount() {
         return receiptService.getReceiptsCount();
@@ -152,8 +149,9 @@ public class Store {
         //Записване на файл (вече знаем че покупката е успешна)
         saveReceiptToFile(receipt);
 
-        System.out.println("Успешна покупка! Оставащи пари: " + customer.getWalletBalance() + " лв.");
+        System.out.printf("Успешна покупка! Оставащи пари: %.2f лв.%n", customer.getWalletBalance());
     }
+
     public double getTotalRevenue() {
         double total = 0;
         for (Receipt receipt : receiptService.getAllReceipts()) {

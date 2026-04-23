@@ -9,16 +9,16 @@ public class Product {
     private final ProductCategory category;
     private final double supplyPrice;
 
-    //за проследяване на доставки и продажби
+    //проследяване на доставки и продажби
     private int quantityDelivered;
     private int quantitySold;
 
     public Product(int id, String name, double supplyPrice, LocalDate expiryDate, ProductCategory category) {
         if (id <= 0) throw new IllegalArgumentException("ID must be positive");
-        if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("Name cannot be null or empty");
-        if (supplyPrice < 0) throw new IllegalArgumentException("Price cannot be negative");
-        if (expiryDate == null) throw new IllegalArgumentException("Expiry date cannot be null");
-        if (category == null) throw new IllegalArgumentException("Category cannot be null");
+        if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("name cannot be null or empty");
+        if (supplyPrice < 0) throw new IllegalArgumentException("price cannot be negative");
+        if (expiryDate == null) throw new IllegalArgumentException("expiry date cannot be null");
+        if (category == null) throw new IllegalArgumentException("category cannot be null");
 
         this.id = id;
         this.name = name;
@@ -30,13 +30,13 @@ public class Product {
     }
 
     public void addDelivery(int quantity) {
-        if (quantity < 0) throw new IllegalArgumentException("Quantity cannot be negative");
+        if (quantity <= 0) throw new IllegalArgumentException("quantity cannot be negative или нула");
         this.quantityDelivered += quantity;
     }
     public void addSale(int quantity) {
-        if (quantity < 0) throw new IllegalArgumentException("Quantity cannot be negative");
+        if (quantity <= 0) throw new IllegalArgumentException("quantity cannot be negative или нула");
         if (quantity > getAvailableQuantity()) {
-            throw new IllegalStateException("Not enough stock for sale");
+            throw new IllegalStateException("not enough stock for sale");
         }
         this.quantitySold += quantity;
     }

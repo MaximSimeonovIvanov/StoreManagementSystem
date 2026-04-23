@@ -29,8 +29,8 @@ public class Customer {
     }
 
     public void deductMoney(double amount) {
-        if (amount < 0) {
-            throw new IllegalArgumentException("Amount cannot be negative");
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount cannot be negative or zero");
         }
         if (!canAfford(amount)) {
             throw new IllegalStateException(
@@ -39,13 +39,6 @@ public class Customer {
             );
         }
         walletBalance -= amount;
-    }
-
-    public void addMoney(double amount) {
-        if (amount < 0) {
-            throw new IllegalArgumentException("Amount cannot be negative");
-        }
-        walletBalance += amount;
     }
 
     @Override

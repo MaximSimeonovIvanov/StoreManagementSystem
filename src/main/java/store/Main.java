@@ -54,9 +54,9 @@ public class Main {
             try {
                 Receipt receipt2 = store.createReceipt(cashier);
                 store.addProductToReceipt(receipt2.getId(), 101, 100);
-                System.out.println("ГРЕШКА: това не трябва да се случи");
+                System.out.println("грешка: това не трябва да се случи");
             } catch (InsufficientStockException e) {
-                System.out.println("УСПЕХ:" + e.getMessage());
+                System.out.println("успех:" + e.getMessage());
                 System.out.println("Искани:" + e.getRequestedQuantity() + ", Налични:" + e.getAvailableQuantity());
             }
         } else {
@@ -64,7 +64,7 @@ public class Main {
         }
 
         if (store != null && cashier != null) {
-            System.out.println("\n Тест 2:изтеккъл продукт");
+            System.out.println("\n тест 2:изтеккъл продукт");
             try {
                 //изтекъл вчера
                 Product expiredYogurt = new Product(103, "Кисело мляко", 1.20,
@@ -74,9 +74,9 @@ public class Main {
 
                 Receipt receipt3 = store.createReceipt(cashier);
                 store.addProductToReceipt(receipt3.getId(), 103, 1); //продажба на изтекъл продукт
-                System.out.println("ГРЕШКА:това не трябва да се случи. не може да продаваме продукти с изтекъл срок");
+                System.out.println("грешка:това не трябва да се случи. не може да продаваме продукти с изтекъл срок");
             } catch (IllegalStateException e) {
-                System.out.println("УСПЕХ: " + e.getMessage());
+                System.out.println("успех: " + e.getMessage());
             }
         }
 

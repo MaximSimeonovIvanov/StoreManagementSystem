@@ -16,8 +16,6 @@ public class InsufficientStockException extends RuntimeException {
         this.availableQuantity = availableQuantity;
     }
 
-    public int getProductId() { return productId; }
-    public String getProductName() { return productName; }
     public int getRequestedQuantity() { return requestedQuantity; }
     public int getAvailableQuantity() { return availableQuantity; }
 }

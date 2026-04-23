@@ -29,13 +29,7 @@ public class Cashier {
     public void assignToRegister(Register register){
         this.currentRegister = register;
     }
-    public void unassignFromRegister(){
-        this.currentRegister = null;
-    }
     public Register getCurrentRegister(){
         return currentRegister;
-    }
-    public boolean isAssignedToRegister(){
-        return currentRegister != null;
     }
 }

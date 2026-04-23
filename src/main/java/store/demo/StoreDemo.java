@@ -97,7 +97,7 @@ public class StoreDemo{
 
         //клиенти с различни бюджети
         Customer richCustomer = new Customer("матей петров", 50.0);
-        Customer normalCustomer = new Customer("българин", 20.0);
+        Customer normalCustomer = new Customer("лука йоанов", 20.0);
 
         System.out.println("създадени клиенти: "+richCustomer.getName()+" пазарува");
         Cashier cashier = store.getCashiers().get(0);
@@ -155,7 +155,7 @@ public class StoreDemo{
             Receipt receipt2 = store.createReceipt(store.getCashiers().get(0));
             store.addProductToReceipt(receipt2.getId(), 101,1000);
             System.out.println("грешка: това не трябва да се случва");
-            } catch (Exception e){System.out.println(" УСПЕХ: системата хвана грешка"+e.getMessage());}
+            } catch (Exception e){System.out.println(" УСПЕХ: системата хвана грешка г"+e.getMessage());}
 
         //изтекъл продукт
         System.out.println("\n ГРЕШКА 3: опит за продажба на изтекъл продукт");
@@ -167,6 +167,6 @@ public class StoreDemo{
             System.out.println("Greshka - tova ne tryabva da se sluchva");
         } catch (IllegalStateException e){System.out.println(" УПСЕХ: Системата хвана грешкатаааааа: "+e.getMessage());}
 
-        System.out.println("\n Всички грешки бяха обработени правилно. ДАНО!");
+        System.out.println("\n Всички грешки бяха обработени правилно!");
     }
 }

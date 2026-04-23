@@ -31,6 +31,7 @@ class InventoryServiceImplTest {
     }
 
     @Test
+    //ако тук се върнеше null, методи като checkAvailability биха се счупили.този тест гарантира, че системата третира липсващите продукти като наличност = 0
     void testGetStockForNonExistentProductReturnsZero() {
         assertEquals(0, inventoryService.getStock(999));
     }

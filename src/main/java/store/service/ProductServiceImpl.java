@@ -39,26 +39,26 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> getAllProducts(){
-        return new ArrayList<>(products); //връща копие
+        return new ArrayList<>(products); //връща копие и запазвам капсулацията
     }
 
-        @Override
-        public void recordProductSale(int productId, int quantity) {
-            Product product = findProductById(productId);
-            if (product == null) {
-                throw new IllegalArgumentException("Product with ID " + productId + " not found");
-            }
-            product.addSale(quantity);
+    @Override
+    public void recordProductSale(int productId, int quantity) {
+        Product product = findProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product with ID " + productId + " not found");
         }
+        product.addSale(quantity);
+    }
 
-        @Override
-        public void recordProductDelivery(int productId, int quantity) {
-            Product product = findProductById(productId);
-            if (product == null) {
-                throw new IllegalArgumentException("Product with ID " + productId + " not found");
-            }
-            product.addDelivery(quantity);
+    @Override
+    public void recordProductDelivery(int productId, int quantity) {
+        Product product = findProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product with ID " + productId + " not found");
         }
+        product.addDelivery(quantity);
+    }
 
 
 }

@@ -24,7 +24,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 
         Receipt receipt = new Receipt(receiptId, cashier);
         receipts.add(receipt);
-        //ReceiptFileWriter.saveReceiptToFile(receipt); ne zapisvam fail pri prazna belejka //статичен coupling
+        //ReceiptFileWriter.saveReceiptToFile(receipt); ne zapisvam fail pri prazna belejka //статичен coupling, а вместо това dependency injection чрез ReceiptFileService
         return receipt;
     }
 

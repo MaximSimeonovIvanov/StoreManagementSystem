@@ -14,8 +14,8 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public void addStock(int productId, int quantity) {
-        if (quantity < 0) {
-            throw new IllegalArgumentException("Quantity cannot be negative");
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity cannot be negative or zero");
         }
 
         int current = productQuantities.getOrDefault(productId, 0);
