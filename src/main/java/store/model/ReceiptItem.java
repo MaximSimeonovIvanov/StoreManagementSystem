@@ -18,6 +18,7 @@ public class ReceiptItem {
             throw new IllegalArgumentException("Selling price cannot be negative");
         }
 
+        //snapshot pattern - копирам стойностите а не пазя референция към product, защото това би променило старите бележки при например product.setName("novo ime")
         this.productId = product.getId();
         this.productName = product.getName();
         this.sellingPrice = sellingPrice;
@@ -40,7 +41,7 @@ public class ReceiptItem {
     public String toString() {
         return String.format("%s - %d бр. x %.2f лв. = %.2f лв.",
                 productName, quantity, sellingPrice, getSubtotal());
-        // защо: предоставя четим изход при печат и debugging
+        //предоставя четим изход при печат и debugging
     }
 
 }

@@ -1,5 +1,5 @@
 package store.model;
-
+//Store е единствената точка за достъп до цялата бизнес логика
 import store.service.*;
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class Store {
     private final ReceiptFileService receiptFileService;
     private final RegisterService registerService;
 
-                    //параметрите
+    //store приема абстракции перз конструктора си, dependency inj = по-лесно тестване и променяне
     public Store(String name,
                  InventoryService inventoryService,
                  PricingService pricingService,
