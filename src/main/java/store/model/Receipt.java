@@ -6,13 +6,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class Receipt {
-    // int id → String id
     private final String id;
     private final Cashier cashier;
     private final LocalDateTime dateTime;
     private final List<ReceiptItem> items;
 
-    // int id → String id
     public Receipt(String id, Cashier cashier) {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Receipt ID cannot be null or empty");

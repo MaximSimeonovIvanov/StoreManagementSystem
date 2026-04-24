@@ -11,22 +11,16 @@ public class StoreDemo{
     public static void main(String[] args){
         System.out.println("ДЕМОНСТРАТИВЕН МАГАЗИН\n");
 
-        //създавам магазин
         Store store = createStore();
 
-        //каси и касиери
         demonstrateStaffAndRegisters(store);
 
-        //продукти и наличности
         demonstrateProducts(store);
 
-        //продажби с клиенти
         demonstrateSales(store);
 
-        //финансови отчети
         demonstrateFinance(store);
 
-        //грешки
         demonstrateErrors(store);
 
         System.out.println("\n край не демонстрация");

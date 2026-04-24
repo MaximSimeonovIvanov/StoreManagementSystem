@@ -4,7 +4,6 @@ import store.service.*;
 import java.util.List;
 
 public class Store {
-    //полетата
     private final String name;
     private final InventoryService inventoryService;
     private final PricingService pricingService;
@@ -14,7 +13,6 @@ public class Store {
     private final ReceiptFileService receiptFileService;
     private final RegisterService registerService;
 
-    //store приема абстракции перз конструктора си, dependency inj = по-лесно тестване и променяне
     public Store(String name,
                  InventoryService inventoryService,
                  PricingService pricingService,

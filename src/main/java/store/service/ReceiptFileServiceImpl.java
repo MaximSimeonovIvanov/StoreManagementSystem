@@ -29,9 +29,6 @@ public class ReceiptFileServiceImpl implements ReceiptFileService{
         //използвам полето receiptDirectory, а не фиксиран низ
         new File(receiptsDirectory).mkdirs();
 
-        //String folder = "receipts";
-        //new File(folder).mkdir();
-
         String fileName = receiptsDirectory+File.separator+"receipt_"+receipt.getId()+".txt";
 
         try(FileWriter writer = new FileWriter(fileName)){
