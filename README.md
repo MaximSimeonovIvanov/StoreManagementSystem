@@ -196,7 +196,7 @@ javac -d out -cp out:lib/junit-platform-console-standalone-1.10.0.jar $(find src
 java -jar lib/junit-platform-console-standalone-1.10.0.jar --class-path out --scan-class-path
 ```
 
-(For simplicity, an IDE like IntelliJ IDEA or Eclipse is recommended to run tests graphically.)
+(For simplicity, an IDE like IntelliJ IDEA is recommended to run tests graphically.)
 
 --------
 
