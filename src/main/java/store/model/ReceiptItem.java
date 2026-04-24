@@ -18,12 +18,11 @@ public class ReceiptItem {
             throw new IllegalArgumentException("Selling price cannot be negative");
         }
 
-        //snapshot pattern - копирам стойностите а не пазя референция към product, защото това би променило старите бележки при например product.setName("novo ime")
         this.productId = product.getId();
         this.productName = product.getName();
         this.sellingPrice = sellingPrice;
         this.quantity = quantity;
-        //дори ако продуктът промени име или цена бележката остава същата
+        //ако продуктът промени име/id/цена чрез евентуални setter-и, бележката остава същата
     }
 
     public int getProductId() {return productId;}
