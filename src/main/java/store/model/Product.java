@@ -9,7 +9,7 @@ public class Product {
     private final ProductCategory category;
     private final double supplyPrice;
 
-    //проследяване на доставки и продажби
+    //проследявам на доставки и продажби
     private int quantityDelivered;
     private int quantitySold;
 

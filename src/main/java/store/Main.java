@@ -56,8 +56,9 @@ public class Main {
                 store.addProductToReceipt(receipt2.getId(), 101, 100);
                 System.out.println("грешка: това не трябва да се случи");
             } catch (InsufficientStockException e) {
-                System.out.println("успех:" + e.getMessage());
-                System.out.println("Искани:" + e.getRequestedQuantity() + ", Налични:" + e.getAvailableQuantity());
+                System.out.println("УСПЕХ: " + e.getMessage());
+                System.out.println("Продукт: " + e.getProductName() + " (ID: " + e.getProductId() + ")");
+                System.out.println("Искани: " + e.getRequestedQuantity() + ", Налични: " + e.getAvailableQuantity());
             }
         } else {
             System.out.println("\nнеуспешно създаване на store или cashier,тестовете се пропускат");
