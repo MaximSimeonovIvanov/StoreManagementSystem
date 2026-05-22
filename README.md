@@ -206,6 +206,6 @@ Maxim Ivanov – Java Developer
 
     GitHub: @MaximSimeonovIvanov
 
-    Email: maksimsimeonov@tutamail.com
+    Email: maksimivanov@tutamail.com
 
 This project was developed as part of a university coursework in software engineering, demonstrating modern Java development practices, clean code principles, and thorough testing.
